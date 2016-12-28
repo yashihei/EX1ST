@@ -11,11 +11,10 @@ public:
 		m_light.Type = D3DLIGHT_DIRECTIONAL;
 		setColor(color);
 		setDir(dir);
+		reflect(true);
 
 		m_d3dDevice->SetRenderState(D3DRS_SPECULARENABLE, TRUE);
 		m_d3dDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
-
-		reflect(true);
 	}
 
 	void setPos(D3DXVECTOR3 pos) {
