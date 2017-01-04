@@ -18,7 +18,7 @@ void GameApp::run() {
 	if (m_scene->nextScene() != SceneType::None)
 		changeScene(m_scene->nextScene());
 
-	if (SUCCEEDED(m_graphics->beginScene(122, 122, 122))) {
+	if (SUCCEEDED(m_graphics->beginScene(10, 20, 30))) {
 		m_scene->draw();
 		m_graphics->endScene();
 	}
