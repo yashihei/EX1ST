@@ -29,7 +29,7 @@ void GameApp::run() {
 void GameApp::changeScene(SceneType type) {
 	switch (type) {
 	case SceneType::Play:
-		m_scene = std::make_shared<Play>(m_graphics->getDevice());
+		m_scene = std::make_shared<Play>(m_graphics->getDevice(), m_inputManager, m_soundManager, m_random);
 		break;
 	}
 }

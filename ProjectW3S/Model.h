@@ -42,10 +42,10 @@ public:
 		m_mesh->Release();
 	}
 
-	void draw(D3DXVECTOR3 pos, float yaw = 0.0f, float pitch = 0.0f, float roll = 0.0f, float ratio = 1.0f) {
+	void draw(D3DXVECTOR3 pos, float x = 0.0f, float y = 0.0f, float z = 0.0f, float ratio = 1.0f) {
 		D3DXMATRIX world, trans, rot, scaling;
 		D3DXMatrixTranslation(&trans, pos.x, pos.y, pos.z);
-		D3DXMatrixRotationYawPitchRoll(&rot, yaw, pitch, roll);
+		D3DXMatrixRotationYawPitchRoll(&rot, D3DXToRadian(y), D3DXToRadian(x), D3DXToRadian(z));
 		D3DXMatrixScaling(&scaling, ratio, ratio, ratio);
 
 		D3DXMatrixIdentity(&world);

@@ -23,12 +23,22 @@ public:
 
 		D3DXMatrixIdentity(&m_world);
 	}
+
 	~Sprite() {
 		if (m_vtxBuf)
 			m_vtxBuf->Release();
 	}
 
-	void draw(D3DXVECTOR3 pos, CameraPtr camera) {
+	void draw(D3DXVECTOR3 pos, float x, float y, float z, float scale = 1.0f) {
+		D3DXMatrixIdentity(&m_world);
+		setScale(scale, scale);
+		setRot(x, y, z);
+		setPos(pos);
+		m_d3dDevice->SetTransform(D3DTS_WORLD, &m_world);
+		render();
+	}
+
+	void drawBillBoard(D3DXVECTOR3 pos, CameraPtr camera) {
 		D3DXMatrixIdentity(&m_world);
 		lookCamera(camera);
 		setPos(pos);
@@ -40,6 +50,7 @@ public:
 		for (int i = 0; i < 4; i++)
 			m_vtx[i].diffuse = diffuse;
 	}
+
 	void setSize(float width, float height) {
 		float wh = width / 2;
 		float hh = height / 2;
@@ -49,12 +60,14 @@ public:
 		m_vtx[2].x = -wh; m_vtx[2].y = -hh; m_vtx[2].z = 0;
 		m_vtx[3].x = wh; m_vtx[3].y = -hh; m_vtx[3].z = 0;
 	}
+
 	void setUV(TextureUV uv) {
 		m_vtx[0].u = uv.tu1; m_vtx[0].v = uv.tv1;
 		m_vtx[1].u = uv.tu2; m_vtx[1].v = uv.tv1;
 		m_vtx[2].u = uv.tu1; m_vtx[2].v = uv.tv2;
 		m_vtx[3].u = uv.tu2; m_vtx[3].v = uv.tv2;
 	}
+
 	void setVtx() {
 		SpriteVtx* data;
 		if (SUCCEEDED(m_vtxBuf->Lock(0, 0, (void**)&data, 0))) {
@@ -72,6 +85,12 @@ private:
 		m_d3dDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 	}
 
+	void setScale(float x, float y) {
+		D3DXMATRIX scale;
+		D3DXMatrixScaling(&scale, x, y, 0);
+		m_world *= scale;
+	}
+
 	void lookCamera(CameraPtr camera) {
 		D3DXMATRIX view = camera->getViewMat();
 		view._41 = view._42 = view._43 = 0;
@@ -79,16 +98,16 @@ private:
 		m_world *= view;
 	}
 
+	void setRot(float x, float y, float z) {
+		D3DXMATRIX rot;
+		D3DXMatrixRotationYawPitchRoll(&rot, D3DXToRadian(y), D3DXToRadian(x), D3DXToRadian(z));
+		m_world *= rot;
+	}
+
 	void setPos(D3DXVECTOR3 pos) {
 		D3DXMATRIX trans;
 		D3DXMatrixTranslation(&trans, pos.x, pos.y, pos.z);
 		m_world *= trans;
-	}
-
-	void setScale(float x, float y) {
-		D3DXMATRIX scale;
-		D3DXMatrixScaling(&scale, x, y, 0);
-		m_world *= scale;
 	}
 
 	struct SpriteVtx {
