@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Common.h"
-#include "Shape.h"
 
 class Play : public Scene {
 public:
