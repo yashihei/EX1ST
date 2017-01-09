@@ -77,6 +77,10 @@ public:
 	}
 private:
 	void render() {
+		m_d3dDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
+		m_d3dDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
+		m_d3dDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
+
 		m_d3dDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 		m_d3dDevice->SetTexture(0, m_tex->getTexPtr());
 		m_d3dDevice->SetStreamSource(0, m_vtxBuf, 0, sizeof(SpriteVtx));
