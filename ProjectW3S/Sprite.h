@@ -5,10 +5,6 @@
 #include "Texture.h"
 #include "Camera.h"
 
-struct TextureUV {
-	float tu1, tv1, tu2, tv2;
-};
-
 class Sprite {
 public:
 	Sprite(LPDIRECT3DDEVICE9 d3dDevice, TexturePtr texture, int pixelPerUnit)

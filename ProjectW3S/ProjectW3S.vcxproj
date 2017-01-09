@@ -131,11 +131,13 @@
     <ClInclude Include="Math.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Play.h" />
+    <ClInclude Include="Play2.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="Sprite.h" />
+    <ClInclude Include="Sprite2D.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="UtilFunc.h" />
     <ClInclude Include="Vector2.h" />

@@ -10,7 +10,7 @@ public:
 	}
 	void update() {
 		m_count++;
-		m_sprite->setDiffuse(HSV(1.0f/3600*m_count, 1.0f, 1.0f).toColor(0.6f).toD3Dcolor());
+		m_sprite->setDiffuse(HSV(1.0f/3600*m_count, 1.0f, 1.0f).toColor(0.8f).toD3Dcolor());
 		m_sprite->setUV({0, m_count/300.0f, 1.0f, 1.0f + m_count/300.0f});
 		m_sprite->setVtx();
 	}

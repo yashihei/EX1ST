@@ -5,6 +5,10 @@
 #include <memory>
 #include "Point.h"
 
+struct TextureUV {
+	float tu1, tv1, tu2, tv2;
+};
+
 class Texture {
 public:
 	Texture(LPDIRECT3DDEVICE9 d3dDevice, std::string filePath) :
