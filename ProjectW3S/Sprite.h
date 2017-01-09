@@ -20,15 +20,26 @@ public:
 		D3DXMatrixIdentity(&m_world);
 	}
 
+	Sprite(LPDIRECT3DDEVICE9 d3dDevice, TexturePtr texture, float widht, float height)
+		: m_d3dDevice(d3dDevice), m_tex(texture)
+	{
+		m_d3dDevice->CreateVertexBuffer(sizeof(SpriteVtx) * 4, D3DUSAGE_WRITEONLY, SpriteVtxFVF, D3DPOOL_MANAGED, &m_vtxBuf, NULL);
+		setDiffuse(0xFFffFFff);
+		setSize(widht, height);
+		setUV({ 0.0f, 0.0f, 1.0f, 1.0f });
+		setVtx();
+		D3DXMatrixIdentity(&m_world);
+	}
+
 	~Sprite() {
 		if (m_vtxBuf)
 			m_vtxBuf->Release();
 	}
 
-	void draw(D3DXVECTOR3 pos, float x, float y, float z, float scale = 1.0f) {
+	void draw(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float scale = 1.0f) {
 		D3DXMatrixIdentity(&m_world);
 		setScale(scale, scale);
-		setRot(x, y, z);
+		setRot(rot.x, rot.y, rot.z);
 		setPos(pos);
 		m_d3dDevice->SetTransform(D3DTS_WORLD, &m_world);
 		render();

@@ -3,6 +3,7 @@
 #include <d3dx9.h>
 #include <string>
 #include <memory>
+#include <unordered_map>
 #include "Point.h"
 
 struct TextureUV {
@@ -38,3 +39,20 @@ private:
 };
 
 using TexturePtr = std::shared_ptr<Texture>;
+
+class TextureManager {
+public:
+	TextureManager(LPDIRECT3DDEVICE9 d3dDevice) :
+		m_d3dDevice(d3dDevice)
+	{}
+	void load(std::string filePath, std::string alias) {
+		m_textures[alias] = std::make_shared<Texture>(m_d3dDevice, filePath);
+	}
+	void clear() { m_textures.clear(); }
+	std::shared_ptr<Texture> getTexture(std::string alias) { return m_textures[alias]; }
+private:
+	std::unordered_map<std::string, std::shared_ptr<Texture>> m_textures;
+	LPDIRECT3DDEVICE9 m_d3dDevice;
+};
+
+using TextureManagerPtr = std::shared_ptr<TextureManager>;

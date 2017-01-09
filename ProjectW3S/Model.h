@@ -42,15 +42,15 @@ public:
 		m_mesh->Release();
 	}
 
-	void draw(D3DXVECTOR3 pos, float x = 0.0f, float y = 0.0f, float z = 0.0f, float ratio = 1.0f) {
-		D3DXMATRIX world, trans, rot, scaling;
+	void draw(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float ratio = 1.0f) {
+		D3DXMATRIX world, trans, rotMat, scaling;
 		D3DXMatrixScaling(&scaling, ratio, ratio, ratio);
-		D3DXMatrixRotationYawPitchRoll(&rot, D3DXToRadian(y), D3DXToRadian(x), D3DXToRadian(z));
+		D3DXMatrixRotationYawPitchRoll(&rotMat, D3DXToRadian(rot.y), D3DXToRadian(rot.x), D3DXToRadian(rot.z));
 		D3DXMatrixTranslation(&trans, pos.x, pos.y, pos.z);
 
 		D3DXMatrixIdentity(&world);
 		D3DXMatrixMultiply(&world, &world, &scaling);
-		D3DXMatrixMultiply(&world, &world, &rot);
+		D3DXMatrixMultiply(&world, &world, &rotMat);
 		D3DXMatrixMultiply(&world, &world, &trans);
 
 		draw(world);

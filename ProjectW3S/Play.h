@@ -15,14 +15,14 @@ public:
 		m_sprite->setVtx();
 	}
 	void draw() {
-		m_sprite->draw({ 0, -2, 0 }, 90, 0, 180);
-		m_sprite->draw({ 0, 2, 0 }, -90, 0, 0);
-		m_sprite->draw({ -2, 0, 0 }, 0, -90, 90);
-		m_sprite->draw({ 2, 0, 0 }, 0, 90, -90);
-		m_sprite->draw({ 0, -2, 4 }, 90, 0, 180);
-		m_sprite->draw({ 0, 2, 4 }, -90, 0, 0);
-		m_sprite->draw({ -2, 0, 4 }, 0, -90, 90);
-		m_sprite->draw({ 2, 0, 4 }, 0, 90, -90);
+		m_sprite->draw({ 0, -2, 0 }, { 90, 0, 180 });
+		m_sprite->draw({ 0, 2, 0 }, { -90, 0, 0 });
+		m_sprite->draw({ -2, 0, 0 }, { 0, -90, 90 });
+		m_sprite->draw({ 2, 0, 0 }, { 0, 90, -90 });
+		m_sprite->draw({ 0, -2, 4 }, { 90, 0, 180 });
+		m_sprite->draw({ 0, 2, 4 }, { -90, 0, 0 });
+		m_sprite->draw({ -2, 0, 4 }, { 0, -90, 90 });
+		m_sprite->draw({ 2, 0, 4 }, { 0, 90, -90 });
 	}
 private:
 	SpritePtr m_sprite;
@@ -58,7 +58,7 @@ public:
 		m_pos.y = Clamp(m_pos.y, -2.0f, 2.0f);
 	}
 	void draw() {
-		m_model->draw(m_pos, 0, 0, m_count);
+		m_model->draw(m_pos, { 0, 0, 0 });
 	}
 private:
 	LPDIRECT3DDEVICE9 m_d3dDevice;

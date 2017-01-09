@@ -32,7 +32,7 @@ public:
 
 	void draw(TextureUV uv, D3DXVECTOR2 pos, float rad, float scale, const D3DXCOLOR& color, bool mirror) {
 		auto texSize = m_texture->getSize();
-		auto size = D3DXVECTOR2(texSize.x * (uv.tu2 - uv.tu1), texSize.y * (uv.tv2 - uv.tv1));
+		auto size = D3DXVECTOR2(texSize.x * (1.0f / m_col), texSize.y * (1.0f / m_row));
 
 		std::vector<Sprite2DVtx> vtx {
 			{{-size.x/2, -size.y/2, 0}, 1.0f, color, {uv.tu1, uv.tv1}},
