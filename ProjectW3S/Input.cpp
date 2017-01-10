@@ -178,16 +178,3 @@ void InputManager::update() {
 	m_mouse->updateState();
 	m_xInput->updateState();
 }
-
-Vector2 InputManager::getAxis() {
-	Vector2 dir;
-	if (!m_xInput->getLSDir().isZero()) {
-		dir = m_xInput->getLSDir();
-	} else {
-		if (isPressedRight()) dir.x = 1.0f;
-		if (isPressedLeft()) dir.x = -1.0f;
-		if (isPressedDown()) dir.y = 1.0f;
-		if (isPressedUp()) dir.y = -1.0f;
-	}
-	return dir;
-}

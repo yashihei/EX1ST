@@ -96,7 +96,7 @@ public:
 	~InputManager();
 	void update();
 
-	bool isPressedButton1() const { return m_keyboard->isPressed(DIK_Z) | m_xInput->isPressed(XInput::Y); }
+	bool isPressedButton1() const { return m_keyboard->isPressed(DIK_Z) | m_keyboard->isPressed(DIK_SPACE) | m_xInput->isPressed(XInput::Y); }
 	bool isPressedButton2() const { return m_keyboard->isPressed(DIK_X) | m_xInput->isPressed(XInput::B); }
 	bool isPressedButton3() const { return m_keyboard->isPressed(DIK_C) | m_xInput->isPressed(XInput::A); }
 	bool isPressedButton4() const { return m_keyboard->isPressed(DIK_V) | m_xInput->isPressed(XInput::X); }
@@ -106,7 +106,7 @@ public:
 	bool isPressedRight()   const { return m_keyboard->isPressed(DIK_RIGHT) | m_xInput->isPressed(XInput::Right); }
 
 	bool isClickedButton() const { return isClickedButton1() | isClickedButton2() | isClickedButton3() | isClickedButton4(); }
-	bool isClickedButton1() const { return m_keyboard->isClicked(DIK_Z) | m_xInput->isClicked(XInput::Y); }
+	bool isClickedButton1() const { return m_keyboard->isClicked(DIK_Z) | m_keyboard->isClicked(DIK_SPACE) | m_xInput->isClicked(XInput::Y); }
 	bool isClickedButton2() const { return m_keyboard->isClicked(DIK_X) | m_xInput->isClicked(XInput::B); }
 	bool isClickedButton3() const { return m_keyboard->isClicked(DIK_C) | m_xInput->isClicked(XInput::A); }
 	bool isClickedButton4() const { return m_keyboard->isClicked(DIK_V) | m_xInput->isClicked(XInput::X); }
@@ -115,7 +115,7 @@ public:
 	bool isClickedLeft()    const { return m_keyboard->isClicked(DIK_LEFT) | m_xInput->isClicked(XInput::Left); }
 	bool isClickedRight()   const { return m_keyboard->isClicked(DIK_RIGHT) | m_xInput->isClicked(XInput::Right); }
 
-	bool isReleasedButton1() const { return m_keyboard->isReleased(DIK_Z) | m_xInput->isReleased(XInput::Y); }
+	bool isReleasedButton1() const { return m_keyboard->isReleased(DIK_Z) | m_keyboard->isReleased(DIK_SPACE) |m_xInput->isReleased(XInput::Y); }
 	bool isReleasedButton2() const { return m_keyboard->isReleased(DIK_X) | m_xInput->isReleased(XInput::B); }
 	bool isReleasedButton3() const { return m_keyboard->isReleased(DIK_C) | m_xInput->isReleased(XInput::A); }
 	bool isReleasedButton4() const { return m_keyboard->isReleased(DIK_V) | m_xInput->isReleased(XInput::X); }
@@ -123,8 +123,6 @@ public:
 	bool isReleasedDown()    const { return m_keyboard->isReleased(DIK_DOWN) | m_xInput->isReleased(XInput::Down); }
 	bool isReleasedLeft()    const { return m_keyboard->isReleased(DIK_LEFT) | m_xInput->isReleased(XInput::Left); }
 	bool isReleasedRight()   const { return m_keyboard->isReleased(DIK_RIGHT) | m_xInput->isReleased(XInput::Right); }
-
-	Vector2 getAxis();
 
 	std::shared_ptr<Keyboard> getKeyboard() { return m_keyboard; }
 	std::shared_ptr<Mouse> getMouse() { return m_mouse; }
