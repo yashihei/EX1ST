@@ -7,6 +7,18 @@ static const int ScreenWidth = 800;
 static const int ScreenHeight = 600;
 
 //--------------------------------------------------------------------------------
+// STLŽü‚è
+//--------------------------------------------------------------------------------
+#include <cmath>
+#include <algorithm>
+#include <string>
+#include <vector>
+#include <unordered_map>
+#include <deque>
+#include <memory>
+#include <stdexcept>
+
+//--------------------------------------------------------------------------------
 // dx9Žü‚è
 //--------------------------------------------------------------------------------
 #include "Graphics.h"

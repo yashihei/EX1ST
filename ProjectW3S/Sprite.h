@@ -59,13 +59,13 @@ public:
 	}
 
 	void setSize(float width, float height) {
-		float wh = width / 2;
-		float hh = height / 2;
+		float w = width / 2;
+		float h = height / 2;
 
-		m_vtx[0].x = -wh; m_vtx[0].y = hh; m_vtx[0].z = 0;
-		m_vtx[1].x = wh; m_vtx[1].y = hh; m_vtx[1].z = 0;
-		m_vtx[2].x = -wh; m_vtx[2].y = -hh; m_vtx[2].z = 0;
-		m_vtx[3].x = wh; m_vtx[3].y = -hh; m_vtx[3].z = 0;
+		m_vtx[0].x = -w; m_vtx[0].y = h; m_vtx[0].z = 0;
+		m_vtx[1].x = w; m_vtx[1].y = h; m_vtx[1].z = 0;
+		m_vtx[2].x = -w; m_vtx[2].y = -h; m_vtx[2].z = 0;
+		m_vtx[3].x = w; m_vtx[3].y = -h; m_vtx[3].z = 0;
 	}
 
 	void setUV(TextureUV uv) {
