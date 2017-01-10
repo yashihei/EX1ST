@@ -111,7 +111,7 @@ private:
 
 	void setRot(float x, float y, float z) {
 		D3DXMATRIX rot;
-		D3DXMatrixRotationYawPitchRoll(&rot, D3DXToRadian(y), D3DXToRadian(x), D3DXToRadian(z));
+		D3DXMatrixRotationYawPitchRoll(&rot, y, x, z);
 		m_world *= rot;
 	}
 

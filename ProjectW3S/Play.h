@@ -100,6 +100,8 @@ public:
 
 		ModelPtr playerModel = std::make_shared<Model>(d3dDevice, "dat/model.x");
 		m_player = std::make_shared<Player>(m_d3dDevice, input, playerModel);
+
+		m_dlang = std::make_shared<Model>(d3dDevice, "dat/dlang.x");
 	}
 	void update() override {
 		m_count++;
@@ -109,6 +111,7 @@ public:
 	void draw() override {
 		m_background->draw();
 		m_player->draw();
+		m_dlang->draw({ 0, 0, 0 }, { 0, 0, 0 });
 	}
 private:
 	LPDIRECT3DDEVICE9 m_d3dDevice;
@@ -120,6 +123,8 @@ private:
 	LightPtr m_light;
 	BackgroundPtr m_background;
 	PlayerPtr m_player;
+
+	ModelPtr m_dlang;
 
 	int m_count;
 };

@@ -45,7 +45,7 @@ public:
 	void draw(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float ratio = 1.0f) {
 		D3DXMATRIX world, trans, rotMat, scaling;
 		D3DXMatrixScaling(&scaling, ratio, ratio, ratio);
-		D3DXMatrixRotationYawPitchRoll(&rotMat, D3DXToRadian(rot.y), D3DXToRadian(rot.x), D3DXToRadian(rot.z));
+		D3DXMatrixRotationYawPitchRoll(&rotMat, rot.y, rot.x, rot.z);
 		D3DXMatrixTranslation(&trans, pos.x, pos.y, pos.z);
 
 		D3DXMatrixIdentity(&world);
