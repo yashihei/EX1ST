@@ -1,6 +1,6 @@
 #include "GameApp.h"
 
-#include "Play2.h"
+#include "Play.h"
 
 GameApp::GameApp(HWND hWnd, HINSTANCE hInstance, bool fullScreen) {
 	m_graphics = std::make_shared<Graphics>(hWnd, fullScreen);
@@ -29,7 +29,7 @@ void GameApp::run() {
 void GameApp::changeScene(SceneType type) {
 	switch (type) {
 	case SceneType::Play:
-		m_scene = std::make_shared<Play2>(m_graphics->getDevice(), m_inputManager, m_soundManager, m_random);
+		m_scene = std::make_shared<Play>(m_graphics->getDevice(), m_inputManager, m_soundManager, m_random);
 		break;
 	}
 }

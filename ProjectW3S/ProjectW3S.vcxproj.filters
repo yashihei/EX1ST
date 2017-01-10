@@ -27,9 +27,6 @@
     <ClInclude Include="GameApp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Play.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Actor.h">
       <Filter>Header Files\hks\util</Filter>
     </ClInclude>
@@ -90,11 +87,11 @@
     <ClInclude Include="UtilFunc.h">
       <Filter>Header Files\hks\util</Filter>
     </ClInclude>
-    <ClInclude Include="Play2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Sprite2D.h">
       <Filter>Header Files\hks\dx9</Filter>
+    </ClInclude>
+    <ClInclude Include="Play.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
