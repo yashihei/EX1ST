@@ -77,11 +77,11 @@ public:
 		m_model(model), m_pos(pos), m_rot(0, 0, 0), m_player(player)
 	{}
 	void update() {
-		m_rot += D3DXVECTOR3(0, D3DXToRadian(3), D3DXToRadian(3));
+		m_rot += D3DXVECTOR3(0, D3DXToRadian(3), D3DXToRadian(1));
 
 		float rad = std::atan2(m_player->getPos().z - m_pos.z, m_player->getPos().x - m_pos.x);
-		m_pos.z += std::sin(rad) * 0.05f;
-		m_pos.x += std::cos(rad) * 0.05f;
+		m_pos.z += std::sin(rad) * 0.1f;
+		m_pos.x += std::cos(rad) * 0.1f;
 	}
 	void draw() {
 		m_model->draw(m_pos, m_rot);
@@ -156,16 +156,18 @@ public:
 		m_tpsCamera = std::make_shared<TPSCamera>(m_camera, D3DXVECTOR3(0.0f, 3.5f, -10.0f));
 		m_light = std::make_shared<Light>(m_d3dDevice, D3DXVECTOR3(0, -1, 0), D3DCOLORVALUE{1.0f, 1.0f, 1.0f, 1.0f}, D3DCOLORVALUE{0.2f, 0.2f, 0.2f, 1.0f}, D3DCOLORVALUE{1.0f, 1.0f, 1.0f, 1.0f});
 
+		//load tex and create sprite
 		auto gridTex = std::make_shared<Texture>(m_d3dDevice, "dat/grid.png");
 		m_groundSprite = std::make_shared<Sprite>(m_d3dDevice, gridTex, 100, 100);
 		m_groundSprite->setDiffuse(Color(0, 0.5f, 1.0f, 0.4f).toD3Dcolor());
-		m_groundSprite->setUV({ 0, 0, 50, 50 });
+		m_groundSprite->setUV({ 0, 0, 30, 30 });
 		m_groundSprite->setVtx();
 		auto bulletTex = std::make_shared<Texture>(m_d3dDevice, "dat/bullet.png");
 		m_bulletSprite = std::make_shared<Sprite>(m_d3dDevice, bulletTex, 2, 2);
-		m_bulletSprite->setDiffuse(Color(1.0f, 0.5f, 0, 1.0f).toD3Dcolor());
+		m_bulletSprite->setDiffuse(Color(1.0f, 0.7f, 0, 1.0f).toD3Dcolor());
 		m_bulletSprite->setVtx();
 
+		//load model
 		m_playerModel = std::make_shared<Model>(m_d3dDevice, "dat/airplane000.x");
 		m_enemyModel = std::make_shared<Model>(m_d3dDevice, "dat/enemy.x");
 

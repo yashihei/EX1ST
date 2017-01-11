@@ -30,7 +30,7 @@ public:
 		if (m_tex) m_tex->Release();
 	}
 
-	LPDIRECT3DTEXTURE9 getTexPtr() const { return m_tex; }
+	LPDIRECT3DTEXTURE9 const getTexPtr() const { return m_tex; }
 	Point getSize() const { return m_size; }
 private:
 	LPDIRECT3DDEVICE9 m_d3dDevice;

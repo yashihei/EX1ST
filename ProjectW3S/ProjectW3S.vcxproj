@@ -138,6 +138,7 @@
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Sprite2D.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="Time.h" />
     <ClInclude Include="UtilFunc.h" />
     <ClInclude Include="Vector2.h" />
   </ItemGroup>

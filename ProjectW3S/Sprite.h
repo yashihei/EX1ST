@@ -45,8 +45,9 @@ public:
 		render();
 	}
 
-	void drawBillBoard(D3DXVECTOR3 pos, CameraPtr camera) {
+	void drawBillBoard(D3DXVECTOR3 pos, CameraPtr camera, float scale = 1.0f) {
 		D3DXMatrixIdentity(&m_world);
+		setScale(scale, scale);
 		lookCamera(camera);
 		setPos(pos);
 		m_d3dDevice->SetTransform(D3DTS_WORLD, &m_world);
