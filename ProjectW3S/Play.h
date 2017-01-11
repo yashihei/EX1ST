@@ -31,7 +31,7 @@ public:
 		m_rot.y += D3DXToRadian(m_swingSpeed);
 
 		//pose control
-		m_rot.x = -m_speed;
+		m_rot.x = -m_speed * 0.5f;
 		m_rot.z = m_swingSpeed * 0.5f;
 	}
 	void draw() {
@@ -94,6 +94,28 @@ private:
 };
 using EnemiesPtr = std::shared_ptr<ActorManager<Enemy>>;
 
+class Score {
+public:
+	Score(FontPtr font) :
+		m_font(font), m_score(0), m_viewScore(0)
+	{}
+	void addScore(int score) {
+		m_score += score;
+	}
+	void update() {
+		if (m_viewScore < m_score)
+			m_viewScore += (m_score - m_viewScore) / 10 + 1;
+	}
+	void draw() {
+		m_font->drawStr("SCORE:" + std::to_string(m_viewScore), { 12, 12 }, Color(0, 0, 0, 1).toD3Dcolor());
+		m_font->drawStr("SCORE:" + std::to_string(m_viewScore), { 10, 10 });
+	}
+private:
+	FontPtr m_font;
+	int m_score, m_viewScore;
+};
+using ScorePtr = std::shared_ptr<Score>;
+
 class TPSCamera {
 public:
 	TPSCamera(CameraPtr camera, D3DXVECTOR3 offset) :
@@ -136,7 +158,7 @@ public:
 
 		auto gridTex = std::make_shared<Texture>(m_d3dDevice, "dat/grid.png");
 		m_groundSprite = std::make_shared<Sprite>(m_d3dDevice, gridTex, 100, 100);
-		m_groundSprite->setDiffuse(Color(0, 0.5f, 1.0f, 0.5f).toD3Dcolor());
+		m_groundSprite->setDiffuse(Color(0, 0.5f, 1.0f, 0.4f).toD3Dcolor());
 		m_groundSprite->setUV({ 0, 0, 50, 50 });
 		m_groundSprite->setVtx();
 		auto bulletTex = std::make_shared<Texture>(m_d3dDevice, "dat/bullet.png");
@@ -146,6 +168,9 @@ public:
 
 		m_playerModel = std::make_shared<Model>(m_d3dDevice, "dat/airplane000.x");
 		m_enemyModel = std::make_shared<Model>(m_d3dDevice, "dat/enemy.x");
+
+		auto scoreFont = std::make_shared<Font>(m_d3dDevice, 30, "ÉÅÉCÉäÉI", true);
+		m_score = std::make_shared<Score>(scoreFont);
 
 		m_player = std::make_shared<Player>(m_inputManager, m_playerModel);
 		m_shots = std::make_shared<ActorManager<Shot>>();
@@ -157,6 +182,7 @@ public:
 		m_shots->update();
 		m_enemies->update();
 		m_tpsCamera->update(m_player->getPos(), m_player->getRot());
+		m_score->update();
 
 		//shot
 		if (m_inputManager->isPressedButton1() && m_count % 5 == 0) {
@@ -177,6 +203,7 @@ public:
 				if (IsCollied(shot->getPos(), enemy->getPos(), 1, 1)) {
 					enemy->kill();
 					shot->kill();
+					m_score->addScore(100);
 					break;
 				}
 			}
@@ -185,8 +212,15 @@ public:
 	void draw() override {
 		m_player->draw();
 		m_enemies->draw();
+
+		m_d3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+		m_d3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
 		m_groundSprite->draw({ 0, 0, 0 }, { D3DX_PI/2, 0, 0 });
 		m_shots->draw();
+		m_d3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+		m_d3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+		
+		m_score->draw();
 	}
 private:
 	LPDIRECT3DDEVICE9 m_d3dDevice;
@@ -203,4 +237,5 @@ private:
 	PlayerPtr m_player;
 	ShotsPtr m_shots;
 	EnemiesPtr m_enemies;
+	ScorePtr m_score;
 };
