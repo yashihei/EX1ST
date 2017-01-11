@@ -13,7 +13,7 @@ public:
 		if (m_input->isPressedUp())
 			m_speed += 0.025f;
 		else if (m_input->isPressedDown())
-			m_speed -= 0.025f;
+			m_speed -= 0.015f;
 		m_speed *= 0.95f;
 
 		//move control
@@ -84,7 +84,7 @@ public:
 		m_pos.x += std::cos(rad) * 0.05f;
 	}
 	void draw() {
-		m_model->draw(m_pos, m_rot, 1.0f);
+		m_model->draw(m_pos, m_rot);
 	}
 	D3DXVECTOR3 getPos() const { return m_pos; }
 private:
@@ -102,7 +102,7 @@ public:
 	void update(D3DXVECTOR3 lookAt, D3DXVECTOR3 rot) {
 		//カメラの動きを遅延させるため、一定フレームの動きを記録する
 		m_tracks.push_back(std::make_pair(lookAt, rot));
-		if (m_tracks.size() > 10)
+		if (m_tracks.size() > 15)
 			m_tracks.pop_front();
 
 		auto nowLookAt = m_tracks[0].first;
@@ -132,7 +132,7 @@ public:
 	{
 		m_camera = std::make_shared<Camera>(m_d3dDevice, D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0));
 		m_tpsCamera = std::make_shared<TPSCamera>(m_camera, D3DXVECTOR3(0.0f, 3.5f, -10.0f));
-		m_light = std::make_shared<Light>(m_d3dDevice, D3DXVECTOR3(0, -1, 0), D3DCOLORVALUE{1.0f, 1.0f, 1.0f, 1.0f});
+		m_light = std::make_shared<Light>(m_d3dDevice, D3DXVECTOR3(0, -1, 0), D3DCOLORVALUE{1.0f, 1.0f, 1.0f, 1.0f}, D3DCOLORVALUE{0.2f, 0.2f, 0.2f, 1.0f}, D3DCOLORVALUE{1.0f, 1.0f, 1.0f, 1.0f});
 
 		auto gridTex = std::make_shared<Texture>(m_d3dDevice, "dat/grid.png");
 		m_groundSprite = std::make_shared<Sprite>(m_d3dDevice, gridTex, 100, 100);
@@ -145,7 +145,7 @@ public:
 		m_bulletSprite->setVtx();
 
 		m_playerModel = std::make_shared<Model>(m_d3dDevice, "dat/airplane000.x");
-		m_enemyModel = std::make_shared<Model>(m_d3dDevice, "dat/model.x");
+		m_enemyModel = std::make_shared<Model>(m_d3dDevice, "dat/enemy.x");
 
 		m_player = std::make_shared<Player>(m_inputManager, m_playerModel);
 		m_shots = std::make_shared<ActorManager<Shot>>();
@@ -183,10 +183,10 @@ public:
 		}
 	}
 	void draw() override {
-		m_groundSprite->draw({ 0, 0, 0 }, { D3DX_PI/2, 0, 0 });
 		m_player->draw();
-		m_shots->draw();
 		m_enemies->draw();
+		m_groundSprite->draw({ 0, 0, 0 }, { D3DX_PI/2, 0, 0 });
+		m_shots->draw();
 	}
 private:
 	LPDIRECT3DDEVICE9 m_d3dDevice;

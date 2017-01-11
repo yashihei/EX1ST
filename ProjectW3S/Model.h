@@ -28,6 +28,7 @@ public:
 
 		for (DWORD i = 0; i < m_numMaterial; i++) {
 			m_materials[i] = mtrlBufPtr[i].MatD3D;
+			m_materials[i].Ambient = m_materials[i].Diffuse;
 			if (mtrlBufPtr[i].pTextureFilename != NULL) {
 				std::string texFilePath(dir);
 				texFilePath += mtrlBufPtr[i].pTextureFilename;

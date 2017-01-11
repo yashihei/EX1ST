@@ -5,15 +5,14 @@
 
 class Light {
 public:
-	Light(LPDIRECT3DDEVICE9 d3dDevice, D3DXVECTOR3 dir, D3DCOLORVALUE color) :
+	Light(LPDIRECT3DDEVICE9 d3dDevice, D3DXVECTOR3 dir, D3DCOLORVALUE diffuse, D3DCOLORVALUE ambient, D3DCOLORVALUE specular) :
 		m_d3dDevice(d3dDevice), m_light(), m_index(0)
 	{
 		m_light.Type = D3DLIGHT_DIRECTIONAL;
-		setColor(color);
+		setColor(diffuse, ambient, specular);
 		setDir(dir);
 		reflect(true);
 
-		//m_d3dDevice->SetRenderState(D3DRS_SPECULARENABLE, TRUE);
 		m_d3dDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 	}
 
@@ -25,10 +24,10 @@ public:
 		D3DXVec3Normalize((D3DXVECTOR3*)&m_light.Direction, &dir);
 	}
 
-	void setColor(D3DCOLORVALUE color) {
-		m_light.Diffuse = color;
-		m_light.Ambient = color;
-		m_light.Specular = color;
+	void setColor(D3DCOLORVALUE diffuse, D3DCOLORVALUE ambient, D3DCOLORVALUE specular) {
+		m_light.Diffuse = diffuse;
+		m_light.Ambient = ambient;
+		m_light.Specular = specular;
 	}
 
 	void reflect(bool enable) {
