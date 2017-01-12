@@ -157,19 +157,19 @@ public:
 		m_light = std::make_shared<Light>(m_d3dDevice, D3DXVECTOR3(0, -1, 0), D3DCOLORVALUE{1.0f, 1.0f, 1.0f, 1.0f}, D3DCOLORVALUE{0.2f, 0.2f, 0.2f, 1.0f}, D3DCOLORVALUE{1.0f, 1.0f, 1.0f, 1.0f});
 
 		//load tex and create sprite
-		auto gridTex = std::make_shared<Texture>(m_d3dDevice, "dat/grid.png");
+		auto gridTex = std::make_shared<Texture>(m_d3dDevice, "assets/grid.png");
 		m_groundSprite = std::make_shared<Sprite>(m_d3dDevice, gridTex, 100, 100);
 		m_groundSprite->setDiffuse(Color(0, 0.5f, 1.0f, 0.4f).toD3Dcolor());
 		m_groundSprite->setUV({ 0, 0, 30, 30 });
 		m_groundSprite->setVtx();
-		auto bulletTex = std::make_shared<Texture>(m_d3dDevice, "dat/bullet.png");
+		auto bulletTex = std::make_shared<Texture>(m_d3dDevice, "assets/bullet.png");
 		m_bulletSprite = std::make_shared<Sprite>(m_d3dDevice, bulletTex, 2, 2);
 		m_bulletSprite->setDiffuse(Color(1.0f, 0.7f, 0, 1.0f).toD3Dcolor());
 		m_bulletSprite->setVtx();
 
 		//load model
-		m_playerModel = std::make_shared<Model>(m_d3dDevice, "dat/airplane000.x");
-		m_enemyModel = std::make_shared<Model>(m_d3dDevice, "dat/enemy.x");
+		m_playerModel = std::make_shared<Model>(m_d3dDevice, "assets/airplane000.x");
+		m_enemyModel = std::make_shared<Model>(m_d3dDevice, "assets/enemy.x");
 
 		auto scoreFont = std::make_shared<Font>(m_d3dDevice, 30, "ÉÅÉCÉäÉI", true);
 		m_score = std::make_shared<Score>(scoreFont);
