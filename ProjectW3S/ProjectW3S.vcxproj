@@ -130,6 +130,7 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="Noncopyable.h" />
     <ClInclude Include="Play.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Random.h" />
