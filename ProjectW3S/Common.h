@@ -42,6 +42,7 @@ static const int ScreenHeight = 600;
 #include "UtilFunc.h"
 #include "Vector2.h"
 #include "FPS.h"
+#include "Time.h"
 #include "Math.h"
 
 #include "FPS.h"

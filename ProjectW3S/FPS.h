@@ -1,7 +1,8 @@
 #pragma once
-#pragma comment(lib, "winmm.lib")
 
+#pragma comment(lib, "winmm.lib")
 #include <Windows.h>
+#include <memory>
 
 class FPSControler {
 public:
