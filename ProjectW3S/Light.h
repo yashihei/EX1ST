@@ -13,6 +13,7 @@ public:
 		setDir(dir);
 		reflect(true);
 
+		m_d3dDevice->SetRenderState(D3DRS_SPECULARENABLE, TRUE);
 		m_d3dDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 	}
 

@@ -170,6 +170,7 @@ public:
 		//load model
 		m_playerModel = std::make_shared<Model>(m_d3dDevice, "assets/airplane000.x");
 		m_enemyModel = std::make_shared<Model>(m_d3dDevice, "assets/enemy.x");
+		m_skyBox = std::make_shared<Model>(m_d3dDevice, "assets/skybox_star.x");
 
 		auto scoreFont = std::make_shared<Font>(m_d3dDevice, 30, "ÉÅÉCÉäÉI", true);
 		m_score = std::make_shared<Score>(scoreFont);
@@ -214,6 +215,7 @@ public:
 	void draw() override {
 		m_player->draw();
 		m_enemies->draw();
+		m_skyBox->draw({ 0, 0, 0 }, { 0, 0, 0 });
 
 		m_d3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 		m_d3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
@@ -235,7 +237,7 @@ private:
 	TPSCameraPtr m_tpsCamera;
 	LightPtr m_light;
 	SpritePtr m_groundSprite, m_bulletSprite;
-	ModelPtr m_playerModel, m_enemyModel;
+	ModelPtr m_playerModel, m_enemyModel, m_skyBox;
 	PlayerPtr m_player;
 	ShotsPtr m_shots;
 	EnemiesPtr m_enemies;
