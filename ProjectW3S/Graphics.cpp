@@ -33,7 +33,16 @@ Graphics::Graphics(HWND hWnd, bool fullScreen) : m_d3d(), m_d3dDevice() {
 		&d3dpp,
 		&m_d3dDevice)))
 	{
-		throw std::runtime_error("Error creating Direct3D device");
+		if (FAILED(m_d3d->CreateDevice(
+			D3DADAPTER_DEFAULT,
+			D3DDEVTYPE_HAL,
+			hWnd,
+			D3DCREATE_SOFTWARE_VERTEXPROCESSING,
+			&d3dpp,
+			&m_d3dDevice)))
+		{
+			throw std::runtime_error("Error creating Direct3D device");
+		}
 	}
 
 	//zバッファ有効
@@ -42,6 +51,8 @@ Graphics::Graphics(HWND hWnd, bool fullScreen) : m_d3d(), m_d3dDevice() {
 	m_d3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	m_d3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	m_d3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+	//カリングの設定
+	m_d3dDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 }
 
 Graphics::~Graphics() {
