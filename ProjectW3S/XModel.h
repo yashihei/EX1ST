@@ -6,9 +6,9 @@
 #include <memory>
 #include "Texture.h"
 
-class Model {
+class XModel {
 public:
-	Model(LPDIRECT3DDEVICE9 d3dDevice, std::string filePath) :
+	XModel(LPDIRECT3DDEVICE9 d3dDevice, std::string filePath) :
 		m_d3dDevice(d3dDevice), m_mesh(), m_numMaterial()
 	{
 		//カレントディレクトリの取得(テクスチャのロードに必要)
@@ -39,7 +39,7 @@ public:
 		mtrlBuf->Release();
 	}
 
-	~Model() {
+	~XModel() {
 		m_mesh->Release();
 	}
 
@@ -77,4 +77,4 @@ private:
 	std::vector<D3DMATERIAL9> m_materials;
 };
 
-using ModelPtr = std::shared_ptr<Model>;
+using XModelPtr = std::shared_ptr<XModel>;

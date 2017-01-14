@@ -4,7 +4,7 @@
 
 class Player {
 public:
-	Player(InputManagerPtr input, ModelPtr model) :
+	Player(InputManagerPtr input, XModelPtr model) :
 		m_input(input), m_model(model),
 		m_pos(0, 0.75, 0), m_rot(0, 0, 0), m_speed(), m_swingSpeed()
 	{}
@@ -42,7 +42,7 @@ public:
 	D3DXVECTOR3 getRot() const { return m_rot; }
 private:
 	InputManagerPtr m_input;
-	ModelPtr m_model;
+	XModelPtr m_model;
 	D3DXVECTOR3 m_pos, m_rot;
 	float m_speed, m_swingSpeed;
 };
@@ -73,7 +73,7 @@ using ShotsPtr = std::shared_ptr<ActorManager<Shot>>;
 
 class Enemy : public Actor {
 public:
-	Enemy(ModelPtr model, D3DXVECTOR3 pos, PlayerPtr player) :
+	Enemy(XModelPtr model, D3DXVECTOR3 pos, PlayerPtr player) :
 		m_model(model), m_pos(pos), m_rot(0, 0, 0), m_player(player)
 	{}
 	void update() {
@@ -88,7 +88,7 @@ public:
 	}
 	D3DXVECTOR3 getPos() const { return m_pos; }
 private:
-	ModelPtr m_model;
+	XModelPtr m_model;
 	D3DXVECTOR3 m_pos, m_rot;
 	PlayerPtr m_player;
 };
@@ -168,8 +168,8 @@ public:
 		m_bulletSprite->setVtx();
 
 		//load model
-		m_playerModel = std::make_shared<Model>(m_d3dDevice, "assets/airplane000.x");
-		m_enemyModel = std::make_shared<Model>(m_d3dDevice, "assets/enemy.x");
+		m_playerModel = std::make_shared<XModel>(m_d3dDevice, "assets/airplane000.x");
+		m_enemyModel = std::make_shared<XModel>(m_d3dDevice, "assets/enemy.x");
 
 		auto scoreFont = std::make_shared<Font>(m_d3dDevice, 30, "ÉÅÉCÉäÉI", true);
 		m_score = std::make_shared<Score>(scoreFont);
@@ -235,7 +235,7 @@ private:
 	TPSCameraPtr m_tpsCamera;
 	LightPtr m_light;
 	SpritePtr m_groundSprite, m_bulletSprite;
-	ModelPtr m_playerModel, m_enemyModel;
+	XModelPtr m_playerModel, m_enemyModel;
 	PlayerPtr m_player;
 	ShotsPtr m_shots;
 	EnemiesPtr m_enemies;

@@ -26,7 +26,7 @@ static const int ScreenHeight = 600;
 #include "Font.h"
 #include "Camera.h"
 #include "Light.h"
-#include "Model.h"
+#include "XModel.h"
 #include "Sprite.h"
 #include "Sprite2D.h"
 

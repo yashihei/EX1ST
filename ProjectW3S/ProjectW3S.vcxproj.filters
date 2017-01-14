@@ -57,9 +57,6 @@
     <ClInclude Include="Math.h">
       <Filter>Header Files\hks\util</Filter>
     </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>Header Files\hks\dx9</Filter>
-    </ClInclude>
     <ClInclude Include="Point.h">
       <Filter>Header Files\hks\util</Filter>
     </ClInclude>
@@ -98,6 +95,9 @@
     </ClInclude>
     <ClInclude Include="Noncopyable.h">
       <Filter>Header Files\hks\util</Filter>
+    </ClInclude>
+    <ClInclude Include="XModel.h">
+      <Filter>Header Files\hks\dx9</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
