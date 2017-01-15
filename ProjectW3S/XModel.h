@@ -19,7 +19,7 @@ public:
 		LPD3DXBUFFER mtrlBuf;
 		HRESULT hr = D3DXLoadMeshFromX(TEXT(filePath.c_str()), D3DXMESH_SYSTEMMEM, m_d3dDevice, NULL, &mtrlBuf, NULL, &m_numMaterial, &m_mesh);
 		if (FAILED(hr))
-			throw std::runtime_error("Failed open" + filePath);
+			throw std::runtime_error("Failed load " + filePath);
 
 		D3DXMATERIAL* mtrlBufPtr = (D3DXMATERIAL*)mtrlBuf->GetBufferPointer();
 

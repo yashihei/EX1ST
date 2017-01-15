@@ -53,6 +53,10 @@ Graphics::Graphics(HWND hWnd, bool fullScreen) : m_d3d(), m_d3dDevice() {
 	m_d3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 	//ƒJƒŠƒ“ƒO‚ÌÝ’è
 	m_d3dDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+	//“§–¾“x‚ª”½‰f‚³‚ê‚é‚æ‚¤‚É
+	m_d3dDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
+	m_d3dDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
+	m_d3dDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
 }
 
 Graphics::~Graphics() {

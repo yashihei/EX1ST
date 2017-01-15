@@ -52,16 +52,9 @@ public:
 			vtx[i].p.y = pos.y + scale * (tPos.x * std::sin(rad) + tPos.y * std::cos(rad));
 		}
 
-		m_d3dDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
-		m_d3dDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
-		m_d3dDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
-
-		m_d3dDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 		m_d3dDevice->SetFVF(Sprite2DVtxFVF);
 		m_d3dDevice->SetTexture(0, m_texture->getTexPtr());
 		m_d3dDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, vtx.data(), sizeof(Sprite2DVtx));
-		m_d3dDevice->SetTexture(0, NULL);
-		m_d3dDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 	}
 private:
 	LPDIRECT3DDEVICE9 m_d3dDevice;

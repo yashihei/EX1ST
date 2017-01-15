@@ -13,6 +13,7 @@ public:
 		m_prevTime = timeGetTime();
 	}
 	~Time() {
+		//FIXME
 		timeEndPeriod(1);
 	}
 	void update() {
@@ -21,7 +22,7 @@ public:
 		m_prevTime = nowTime;
 		m_frameCount++;
 	}
-	int getDeltaTime() const { return m_deltaTime; }
+	float getDeltaTime() const { return m_deltaTime/1000.0f; }
 	int getFrameCount() const { return m_frameCount; }
 private:
 	int m_frameCount;

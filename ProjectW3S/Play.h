@@ -159,7 +159,7 @@ public:
 		//load tex and create sprite
 		auto gridTex = std::make_shared<Texture>(m_d3dDevice, "assets/grid.png");
 		m_groundSprite = std::make_shared<Sprite>(m_d3dDevice, gridTex, 100, 100);
-		m_groundSprite->setDiffuse(Color(0, 0.5f, 1.0f, 0.4f).toD3Dcolor());
+		m_groundSprite->setDiffuse(Color(0, 0.5f, 1.0f, 0.6f).toD3Dcolor());
 		m_groundSprite->setUV({ 0, 0, 30, 30 });
 		m_groundSprite->setVtx();
 		auto bulletTex = std::make_shared<Texture>(m_d3dDevice, "assets/bullet.png");
