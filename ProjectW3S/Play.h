@@ -6,9 +6,11 @@ class Player {
 public:
 	Player(InputManagerPtr input, XModelPtr model) :
 		m_input(input), m_model(model),
-		m_pos(0, 0.75, 0), m_rot(0, 0, 0), m_speed(), m_swingSpeed()
+		m_pos(0, 0.75, 0), m_rot(0, 0, 0), m_speed(), m_swingSpeed(), m_count(0)
 	{}
 	void update() {
+		m_count++;
+
 		//speed control
 		if (m_input->isPressedUp())
 			m_speed += 0.025f;
@@ -21,6 +23,8 @@ public:
 		m_pos += vec;
 		m_pos.x = Clamp(m_pos.x, -50.0f, 50.0f);
 		m_pos.z = Clamp(m_pos.z, -50.0f, 50.0f);
+
+		m_pos.y = 1.0f + std::cos(D3DXToRadian(m_count) * 5) * 0.1f;
 		
 		//turn control
 		if (m_input->isPressedLeft())
@@ -31,11 +35,11 @@ public:
 		m_rot.y += D3DXToRadian(m_swingSpeed);
 
 		//pose control
-		m_rot.x = -m_speed * 0.5f;
-		m_rot.z = m_swingSpeed * 0.5f;
+		m_rot.x = m_speed * 0.5f;
+		m_rot.z = -m_swingSpeed * 0.5f;
 	}
 	void draw() {
-		m_model->draw(m_pos, m_rot + D3DXVECTOR3(0, -D3DX_PI/2, 0), 0.1f);
+		m_model->draw(m_pos, m_rot + D3DXVECTOR3(0, D3DX_PI/2, 0));
 	}
 
 	D3DXVECTOR3 getPos() const { return m_pos; }
@@ -45,6 +49,7 @@ private:
 	XModelPtr m_model;
 	D3DXVECTOR3 m_pos, m_rot;
 	float m_speed, m_swingSpeed;
+	int m_count;
 };
 using PlayerPtr = std::shared_ptr<Player>;
 
@@ -93,6 +98,16 @@ private:
 	PlayerPtr m_player;
 };
 using EnemiesPtr = std::shared_ptr<ActorManager<Enemy>>;
+
+class Particle {
+public:
+private:
+};
+
+class MiniMap {
+public:
+private:
+};
 
 class Score {
 public:
@@ -154,7 +169,7 @@ public:
 	{
 		m_camera = std::make_shared<Camera>(m_d3dDevice, D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0));
 		m_tpsCamera = std::make_shared<TPSCamera>(m_camera, D3DXVECTOR3(0.0f, 3.5f, -10.0f));
-		m_light = std::make_shared<Light>(m_d3dDevice, D3DXVECTOR3(0, -1, 0), D3DCOLORVALUE{1.0f, 1.0f, 1.0f, 1.0f}, D3DCOLORVALUE{0.2f, 0.2f, 0.2f, 1.0f}, D3DCOLORVALUE{1.0f, 1.0f, 1.0f, 1.0f});
+		m_light = std::make_shared<Light>(m_d3dDevice, D3DXVECTOR3(0, -1, 0), D3DCOLORVALUE{1.0f, 1.0f, 1.0f, 1.0f}, D3DCOLORVALUE{0.5f, 0.5f, 0.5f, 1.0f}, D3DCOLORVALUE{1.0f, 1.0f, 1.0f, 1.0f});
 
 		//load tex and create sprite
 		auto gridTex = std::make_shared<Texture>(m_d3dDevice, "assets/grid.png");
@@ -168,7 +183,7 @@ public:
 		m_bulletSprite->setVtx();
 
 		//load model
-		m_playerModel = std::make_shared<XModel>(m_d3dDevice, "assets/airplane000.x");
+		m_playerModel = std::make_shared<XModel>(m_d3dDevice, "assets/player.x");
 		m_enemyModel = std::make_shared<XModel>(m_d3dDevice, "assets/enemy.x");
 
 		auto scoreFont = std::make_shared<Font>(m_d3dDevice, 30, "ÉÅÉCÉäÉI", true);
