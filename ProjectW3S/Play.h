@@ -23,8 +23,7 @@ public:
 		m_pos += vec;
 		m_pos.x = Clamp(m_pos.x, -50.0f, 50.0f);
 		m_pos.z = Clamp(m_pos.z, -50.0f, 50.0f);
-
-		m_pos.y = 1.0f + std::cos(D3DXToRadian(m_count) * 5) * 0.1f;
+		m_pos.y = 1.0f + std::cos(D3DXToRadian(m_count) * 3) * 0.1f;
 		
 		//turn control
 		if (m_input->isPressedLeft())
@@ -82,7 +81,7 @@ public:
 		m_model(model), m_pos(pos), m_rot(0, 0, 0), m_player(player)
 	{}
 	void update() {
-		m_rot += D3DXVECTOR3(0, D3DXToRadian(3), D3DXToRadian(1));
+		m_rot += D3DXVECTOR3(0, D3DXToRadian(3), D3DXToRadian(3));
 
 		float rad = std::atan2(m_player->getPos().z - m_pos.z, m_player->getPos().x - m_pos.x);
 		m_pos.z += std::sin(rad) * 0.1f;
@@ -204,7 +203,7 @@ public:
 		//shot
 		if (m_inputManager->isPressedButton1() && m_count % 5 == 0) {
 			auto vec = D3DXVECTOR3(3 * std::cos(m_player->getRot().y), 0.0f, -3 * std::sin(m_player->getRot().y));
-			auto shot = std::make_shared<Shot>(m_bulletSprite, m_camera, m_player->getPos(), vec);
+			auto shot = std::make_shared<Shot>(m_bulletSprite, m_camera, m_player->getPos() + vec, vec);
 			m_shots->add(shot);
 		}
 
