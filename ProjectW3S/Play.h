@@ -6,7 +6,7 @@ class Player {
 public:
 	Player(InputManagerPtr input, XModelPtr model) :
 		m_input(input), m_model(model),
-		m_pos(0, 0.75, 0), m_rot(0, 0, 0), m_speed(), m_swingSpeed(), m_count(0)
+		m_pos(0, 0.75, 0), m_rot(0, 0, 0), m_speed(0), m_swingSpeed(0), m_count(0)
 	{}
 	void update() {
 		m_count++;
@@ -75,6 +75,17 @@ private:
 };
 using ShotsPtr = std::shared_ptr<ActorManager<Shot>>;
 
+class HormingShot : public Actor {
+	HormingShot(SpritePtr sprite, D3DXVECTOR3 pos, D3DXVECTOR3 vec) {
+	}
+	void update() {
+	}
+	void draw() {
+	}
+private:
+	std::deque<std::pair<D3DXVECTOR3, D3DXVECTOR3>> m_tracks;
+};
+
 class Enemy : public Actor {
 public:
 	Enemy(XModelPtr model, D3DXVECTOR3 pos, PlayerPtr player) :
@@ -97,11 +108,6 @@ private:
 	PlayerPtr m_player;
 };
 using EnemiesPtr = std::shared_ptr<ActorManager<Enemy>>;
-
-class Particle {
-public:
-private:
-};
 
 class MiniMap {
 public:
@@ -176,8 +182,8 @@ public:
 		m_groundSprite->setDiffuse(Color(0, 0.5f, 1.0f, 0.6f).toD3Dcolor());
 		m_groundSprite->setUV({ 0, 0, 30, 30 });
 		m_groundSprite->setVtx();
-		auto bulletTex = std::make_shared<Texture>(m_d3dDevice, "assets/bullet.png");
-		m_bulletSprite = std::make_shared<Sprite>(m_d3dDevice, bulletTex, 2, 2);
+		auto circleTex = std::make_shared<Texture>(m_d3dDevice, "assets/circle.png");
+		m_bulletSprite = std::make_shared<Sprite>(m_d3dDevice, circleTex, 2, 2);
 		m_bulletSprite->setDiffuse(Color(1.0f, 0.7f, 0, 1.0f).toD3Dcolor());
 		m_bulletSprite->setVtx();
 

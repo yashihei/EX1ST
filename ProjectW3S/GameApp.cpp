@@ -1,6 +1,7 @@
 #include "GameApp.h"
 
 #include "Play.h"
+#include "Title.h"
 
 GameApp::GameApp(HWND hWnd, HINSTANCE hInstance, bool fullScreen) {
 	m_graphics = std::make_shared<Graphics>(hWnd, fullScreen);
@@ -8,7 +9,7 @@ GameApp::GameApp(HWND hWnd, HINSTANCE hInstance, bool fullScreen) {
 	m_inputManager = std::make_shared<InputManager>(hWnd, hInstance);
 	m_fpsControler = std::make_shared<FPSControler>(60);
 	m_random = std::make_shared<Random>();
-	changeScene(SceneType::Play);
+	changeScene(SceneType::Title);
 }
 
 void GameApp::run() {
@@ -28,6 +29,9 @@ void GameApp::run() {
 
 void GameApp::changeScene(SceneType type) {
 	switch (type) {
+	case SceneType::Title:
+		m_scene = std::make_shared<Title>(m_graphics->getDevice(), m_inputManager, m_random);
+		break;
 	case SceneType::Play:
 		m_scene = std::make_shared<Play>(m_graphics->getDevice(), m_inputManager, m_soundManager, m_random);
 		break;

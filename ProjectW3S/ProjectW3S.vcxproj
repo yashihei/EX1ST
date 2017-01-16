@@ -129,6 +129,8 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Math.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="Title.h" />
     <ClInclude Include="XModel.h" />
     <ClInclude Include="Noncopyable.h" />
     <ClInclude Include="Play.h" />
