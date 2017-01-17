@@ -9,6 +9,7 @@ GameApp::GameApp(HWND hWnd, HINSTANCE hInstance, bool fullScreen) {
 	m_inputManager = std::make_shared<InputManager>(hWnd, hInstance);
 	m_fpsControler = std::make_shared<FPSControler>(60);
 	m_random = std::make_shared<Random>();
+	Font::addFont("assets/orbitron-light.otf");
 	changeScene(SceneType::Title);
 }
 

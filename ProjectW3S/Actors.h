@@ -92,17 +92,6 @@ private:
 };
 using ShotsPtr = std::shared_ptr<ActorManager<Shot>>;
 
-class HormingShot : public Actor {
-	HormingShot(SpritePtr sprite, D3DXVECTOR3 pos, D3DXVECTOR3 vec) {
-	}
-	void update() override {
-	}
-	void draw() override {
-	}
-private:
-	std::deque<std::pair<D3DXVECTOR3, D3DXVECTOR3>> m_tracks;
-};
-
 class Enemy : public Actor {
 public:
 	Enemy(XModelPtr model, D3DXVECTOR3 pos, PlayerPtr player) :
@@ -171,8 +160,8 @@ public:
 			m_viewScore += (m_score - m_viewScore) / 10 + 1;
 	}
 	void draw() {
-		m_font->drawStr("SCORE:" + std::to_string(m_viewScore), { 12, 12 }, Color(0, 0, 0, 1).toD3Dcolor());
-		m_font->drawStr("SCORE:" + std::to_string(m_viewScore), { 10, 10 });
+		m_font->drawStr("SCORE : " + std::to_string(m_viewScore), { 12, 12 }, Color(0, 0, 0, 1).toD3Dcolor());
+		m_font->drawStr("SCORE : " + std::to_string(m_viewScore), { 10, 10 });
 	}
 private:
 	FontPtr m_font;

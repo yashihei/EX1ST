@@ -28,7 +28,7 @@ public:
 		m_playerModel = std::make_shared<XModel>(m_d3dDevice, "assets/player.x");
 		m_enemyModel = std::make_shared<XModel>(m_d3dDevice, "assets/enemy.x");
 
-		auto scoreFont = std::make_shared<Font>(m_d3dDevice, 30, "ƒƒCƒŠƒI", true);
+		auto scoreFont = std::make_shared<Font>(m_d3dDevice, 30, "Orbitron", false);
 		m_score = std::make_shared<Score>(scoreFont);
 
 		m_player = std::make_shared<Player>(m_inputManager, m_playerModel);
@@ -70,8 +70,8 @@ public:
 					shot->kill();
 					m_score->addScore(100);
 					//create particle
-					for (int i = 0; i < 100; i++) {
-						auto vec = D3DXVECTOR3(m_random->nextPlusMinus(0.8f), m_random->nextPlusMinus(0.5f), m_random->nextPlusMinus(0.8f));
+					for (int i = 0; i < 50; i++) {
+						auto vec = D3DXVECTOR3(m_random->nextPlusMinus(0.8f), m_random->nextPlusMinus(0.8f), m_random->nextPlusMinus(0.8f));
 						auto particle = std::make_shared<Particle>(m_particleSprite, m_camera, enemy->getPos(), vec, Color(1.0f, 0.5f, 1.0f, 1.0f));
 						m_particles->add(particle);
 					}
@@ -92,6 +92,7 @@ public:
 		m_player->draw();
 		m_enemies->draw();
 
+		//draw sprites
 		m_d3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 		m_d3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
 		m_groundSprite->draw({ 0, 0, 0 }, { D3DX_PI/2, 0, 0 });
