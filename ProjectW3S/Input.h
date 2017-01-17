@@ -96,6 +96,7 @@ public:
 	~InputManager();
 	void update();
 
+	bool isPressedButton() const { return isPressedButton1() | isPressedButton2() | isPressedButton3() | isPressedButton4(); }
 	bool isPressedButton1() const { return m_keyboard->isPressed(DIK_Z) | m_keyboard->isPressed(DIK_SPACE) | m_xInput->isPressed(XInput::Y); }
 	bool isPressedButton2() const { return m_keyboard->isPressed(DIK_X) | m_xInput->isPressed(XInput::B); }
 	bool isPressedButton3() const { return m_keyboard->isPressed(DIK_C) | m_xInput->isPressed(XInput::A); }

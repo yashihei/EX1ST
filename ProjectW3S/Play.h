@@ -6,10 +6,10 @@ class Player {
 public:
 	Player(InputManagerPtr input, XModelPtr model) :
 		m_input(input), m_model(model),
-		m_pos(0, 0.75, 0), m_rot(0, 0, 0), m_speed(0), m_swingSpeed(0), m_count(0)
+		m_pos(0, 0.75, 0), m_rot(0, 0, 0), m_speed(0), m_swingSpeed(0), m_count(0), m_hp(3), m_damageCount(0)
 	{}
 	void update() {
-		m_count++;
+		m_count++; m_damageCount--;
 
 		//speed control
 		if (m_input->isPressedUp())
@@ -38,7 +38,24 @@ public:
 		m_rot.z = -m_swingSpeed * 0.5f;
 	}
 	void draw() {
-		m_model->draw(m_pos, m_rot + D3DXVECTOR3(0, D3DX_PI/2, 0));
+		if (m_damageCount > 0) {
+			if (m_count % 10 < 5)
+				m_model->draw(m_pos, m_rot + D3DXVECTOR3(0, D3DX_PI/2, 0));
+		} else {
+			m_model->draw(m_pos, m_rot + D3DXVECTOR3(0, D3DX_PI/2, 0));
+		}
+	}
+	void damage() {
+		if (m_damageCount < 0) {
+			m_hp--;
+			m_damageCount = 120;
+		}
+	}
+	bool isAlived() {
+		if (m_hp > 0)
+			return true;
+		else
+			return false;
 	}
 
 	D3DXVECTOR3 getPos() const { return m_pos; }
@@ -48,7 +65,7 @@ private:
 	XModelPtr m_model;
 	D3DXVECTOR3 m_pos, m_rot;
 	float m_speed, m_swingSpeed;
-	int m_count;
+	int m_count, m_hp, m_damageCount;
 };
 using PlayerPtr = std::shared_ptr<Player>;
 
@@ -57,13 +74,13 @@ public:
 	Shot(SpritePtr sprite, CameraPtr camera, D3DXVECTOR3 pos, D3DXVECTOR3 vec) :
 		m_sprite(sprite), m_camera(camera), m_pos(pos), m_vec(vec)
 	{}
-	void update() {
+	void update() override {
 		m_count++;
 		m_pos += m_vec;
 		if (m_count > 300)
 			kill();
 	}
-	void draw() {
+	void draw() override {
 		m_sprite->drawBillBoard(m_pos, m_camera);
 	}
 	D3DXVECTOR3 getPos() const { return m_pos; }
@@ -78,9 +95,9 @@ using ShotsPtr = std::shared_ptr<ActorManager<Shot>>;
 class HormingShot : public Actor {
 	HormingShot(SpritePtr sprite, D3DXVECTOR3 pos, D3DXVECTOR3 vec) {
 	}
-	void update() {
+	void update() override {
 	}
-	void draw() {
+	void draw() override {
 	}
 private:
 	std::deque<std::pair<D3DXVECTOR3, D3DXVECTOR3>> m_tracks;
@@ -91,14 +108,14 @@ public:
 	Enemy(XModelPtr model, D3DXVECTOR3 pos, PlayerPtr player) :
 		m_model(model), m_pos(pos), m_rot(0, 0, 0), m_player(player)
 	{}
-	void update() {
-		m_rot += D3DXVECTOR3(0, D3DXToRadian(3), D3DXToRadian(3));
+	void update() override {
+		m_rot += D3DXVECTOR3(0, D3DXToRadian(2), D3DXToRadian(2));
 
 		float rad = std::atan2(m_player->getPos().z - m_pos.z, m_player->getPos().x - m_pos.x);
-		m_pos.z += std::sin(rad) * 0.1f;
-		m_pos.x += std::cos(rad) * 0.1f;
+		m_pos.z += std::sin(rad) * 0.075f;
+		m_pos.x += std::cos(rad) * 0.075f;
 	}
-	void draw() {
+	void draw() override {
 		m_model->draw(m_pos, m_rot);
 	}
 	D3DXVECTOR3 getPos() const { return m_pos; }
@@ -108,6 +125,24 @@ private:
 	PlayerPtr m_player;
 };
 using EnemiesPtr = std::shared_ptr<ActorManager<Enemy>>;
+
+class Particle : public Actor {
+public:
+	Particle(SpritePtr sprite, CameraPtr camera, D3DXVECTOR3 pos, D3DXVECTOR3 vec) :
+		m_sprite(sprite), m_camera(camera), m_pos(pos), m_vec(vec), m_alpha(1.0f)
+	{}
+	void update() override {
+		m_pos += m_vec;
+	}
+	void draw() override {
+		m_sprite->drawBillBoard(m_pos, m_camera);
+	}
+private:
+	SpritePtr m_sprite;
+	CameraPtr m_camera;
+	D3DXVECTOR3 m_pos, m_vec;
+	float m_alpha;
+};
 
 class MiniMap {
 public:
@@ -173,7 +208,7 @@ public:
 		m_d3dDevice(d3dDevice), m_inputManager(input), m_soundManager(sound), m_random(random)
 	{
 		m_camera = std::make_shared<Camera>(m_d3dDevice, D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0));
-		m_tpsCamera = std::make_shared<TPSCamera>(m_camera, D3DXVECTOR3(0.0f, 3.5f, -10.0f));
+		m_tpsCamera = std::make_shared<TPSCamera>(m_camera, D3DXVECTOR3(0.0f, 3.0f, -7.5f));
 		m_light = std::make_shared<Light>(m_d3dDevice, D3DXVECTOR3(0, -1, 0), D3DCOLORVALUE{1.0f, 1.0f, 1.0f, 1.0f}, D3DCOLORVALUE{0.5f, 0.5f, 0.5f, 1.0f}, D3DCOLORVALUE{1.0f, 1.0f, 1.0f, 1.0f});
 
 		//load tex and create sprite
@@ -200,6 +235,10 @@ public:
 	}
 	void update() override {
 		m_count++;
+		if (!m_player->isAlived()) {
+			changeScene(SceneType::Title);
+		}
+
 		m_player->update();
 		m_shots->update();
 		m_enemies->update();
@@ -207,7 +246,7 @@ public:
 		m_score->update();
 
 		//shot
-		if (m_inputManager->isPressedButton1() && m_count % 5 == 0) {
+		if (m_inputManager->isPressedButton() && m_count % 5 == 0) {
 			auto vec = D3DXVECTOR3(3 * std::cos(m_player->getRot().y), 0.0f, -3 * std::sin(m_player->getRot().y));
 			auto shot = std::make_shared<Shot>(m_bulletSprite, m_camera, m_player->getPos() + vec, vec);
 			m_shots->add(shot);
@@ -228,6 +267,14 @@ public:
 					m_score->addScore(100);
 					break;
 				}
+			}
+		}
+
+		//enemy vs player
+		for (auto& enemy : *m_enemies) {
+			if (IsCollied(enemy->getPos(), m_player->getPos(), 1, 1)) {
+				m_player->damage();
+				break;
 			}
 		}
 	}
