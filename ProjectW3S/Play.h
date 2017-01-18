@@ -22,14 +22,14 @@ public:
 		m_bulletSprite = std::make_shared<Sprite>(m_d3dDevice, circleTex, 2, 2);
 		m_bulletSprite->setDiffuse(Color(1.0f, 0.7f, 0, 1.0f).toD3Dcolor());
 		m_bulletSprite->setVtx();
-		m_particleSprite = std::make_shared<Sprite>(m_d3dDevice, circleTex, 0.75f, 0.75f);
+		m_particleSprite = std::make_shared<Sprite>(m_d3dDevice, circleTex, 0.5f, 0.5f);
 
 		//load model
 		m_playerModel = std::make_shared<XModel>(m_d3dDevice, "assets/player.x");
 		m_enemyModel = std::make_shared<XModel>(m_d3dDevice, "assets/enemy.x");
 
-		auto scoreFont = std::make_shared<Font>(m_d3dDevice, 30, "Orbitron", false);
-		m_score = std::make_shared<Score>(scoreFont);
+		m_textFont = std::make_shared<Font>(m_d3dDevice, 30, "Orbitron", false);
+		m_score = std::make_shared<Score>(m_textFont);
 
 		m_player = std::make_shared<Player>(m_inputManager, m_playerModel);
 		m_shots = std::make_shared<ActorManager<Shot>>();
@@ -68,13 +68,8 @@ public:
 				if (IsCollied(shot->getPos(), enemy->getPos(), 1, 1)) {
 					enemy->kill();
 					shot->kill();
+					createParticle(enemy->getPos(), 50);
 					m_score->addScore(100);
-					//create particle
-					for (int i = 0; i < 50; i++) {
-						auto vec = D3DXVECTOR3(m_random->nextPlusMinus(0.8f), m_random->nextPlusMinus(0.8f), m_random->nextPlusMinus(0.8f));
-						auto particle = std::make_shared<Particle>(m_particleSprite, m_camera, enemy->getPos(), vec, Color(1.0f, 0.5f, 1.0f, 1.0f));
-						m_particles->add(particle);
-					}
 					break;
 				}
 			}
@@ -88,6 +83,20 @@ public:
 			}
 		}
 	}
+
+	void createParticle(D3DXVECTOR3 pos, int num) {
+		for (int i = 0; i < num; i++) {
+			auto vec = D3DXVECTOR3(m_random->next(1.0f), 0, 0);
+
+			D3DXMATRIX rot;
+			D3DXMatrixRotationYawPitchRoll(&rot, m_random->next(D3DX_PI * 2), m_random->next(D3DX_PI * 2), m_random->next(D3DX_PI * 2));
+			D3DXVec3TransformCoord(&vec, &vec, &rot);
+
+			auto particle = std::make_shared<Particle>(m_particleSprite, m_camera, pos, vec, Color(1.0f, 0.5f, 1.0f, 1.0f));
+			m_particles->add(particle);
+		}
+	}
+
 	void draw() override {
 		m_player->draw();
 		m_enemies->draw();
@@ -97,11 +106,9 @@ public:
 		m_d3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
 		m_groundSprite->draw({ 0, 0, 0 }, { D3DX_PI/2, 0, 0 });
 		m_shots->draw();
-
 		m_d3dDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_ALWAYS);
 		m_particles->draw();
 		m_d3dDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
-
 		m_d3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 		m_d3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 		
@@ -119,6 +126,7 @@ private:
 	LightPtr m_light;
 	SpritePtr m_groundSprite, m_bulletSprite, m_particleSprite;
 	XModelPtr m_playerModel, m_enemyModel;
+	FontPtr m_textFont;
 	PlayerPtr m_player;
 	ShotsPtr m_shots;
 	EnemiesPtr m_enemies;

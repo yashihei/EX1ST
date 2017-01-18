@@ -60,6 +60,7 @@ public:
 
 	D3DXVECTOR3 getPos() const { return m_pos; }
 	D3DXVECTOR3 getRot() const { return m_rot; }
+	int getHP() const { return m_hp; }
 private:
 	InputManagerPtr m_input;
 	XModelPtr m_model;
@@ -121,8 +122,8 @@ public:
 		m_sprite(sprite), m_camera(camera), m_pos(pos), m_vec(vec), m_color(color), m_alpha(1.0f)
 	{}
 	void update() override {
-		m_vec *= 0.9f;
-		m_alpha -= 0.01f;
+		m_vec *= 0.95f;
+		m_alpha -= 0.020f;
 		m_pos += m_vec;
 		if (m_alpha < 0)
 			kill();
@@ -144,6 +145,10 @@ using ParticlesPtr = std::shared_ptr<ActorManager<Particle>>;
 
 class MiniMap {
 public:
+	MiniMap(PlayerPtr player, EnemiesPtr enemies) {
+	}
+	void draw() {
+	}
 private:
 };
 

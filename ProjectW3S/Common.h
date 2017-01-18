@@ -16,6 +16,7 @@ static const int ScreenHeight = 600;
 #include <unordered_map>
 #include <deque>
 #include <memory>
+#include <functional>
 #include <stdexcept>
 
 //--------------------------------------------------------------------------------

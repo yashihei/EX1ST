@@ -32,6 +32,7 @@ public:
 	}
 
 	D3DXMATRIX getViewMat() const { return m_view; }
+	D3DXVECTOR3 getPos() const { return m_pos; }
 private:
 	void reflect() {
 		D3DXMatrixLookAtLH(&m_view, &m_pos, &m_lookAt, &m_up);

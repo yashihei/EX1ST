@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <list>
+#include <functional>
 
 class Actor {
 public:
@@ -42,6 +43,9 @@ public:
 		for (auto& actor : m_actors) {
 			actor->draw();
 		}
+	}
+	void sort(std::function< bool(std::shared_ptr<Type>, std::shared_ptr<Type>) > rule) {
+		m_actors.sort(rule);
 	}
 
 	typename std::list<std::shared_ptr<Type>>::const_iterator begin() { return m_actors.begin(); }
