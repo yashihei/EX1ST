@@ -8,7 +8,7 @@
 
 class XModel {
 public:
-	XModel(LPDIRECT3DDEVICE9 d3dDevice, std::string filePath) :
+	XModel(LPDIRECT3DDEVICE9 d3dDevice, const std::string& filePath) :
 		m_d3dDevice(d3dDevice), m_mesh(), m_numMaterial()
 	{
 		//カレントディレクトリの取得(テクスチャのロードに必要)
@@ -43,7 +43,7 @@ public:
 		m_mesh->Release();
 	}
 
-	void draw(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float ratio = 1.0f) {
+	void draw(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, float ratio = 1.0f) {
 		D3DXMATRIX world, trans, rotMat, scaling;
 		D3DXMatrixScaling(&scaling, ratio, ratio, ratio);
 		D3DXMatrixRotationYawPitchRoll(&rotMat, rot.y, rot.x, rot.z);
@@ -57,7 +57,7 @@ public:
 		draw(world);
 	}
 
-	void draw(D3DXMATRIX world) {
+	void draw(const D3DXMATRIX& world) {
 		m_d3dDevice->SetTransform(D3DTS_WORLD, &world);
 
 		for (DWORD i = 0; i < m_numMaterial; i++) {

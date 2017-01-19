@@ -11,11 +11,11 @@ public:
 		: m_d3dDevice(d3dDevice), m_texture(tex), m_col(col), m_row(row)
 	{}
 
-	void draw(D3DXVECTOR2 pos, float rad = 0.0f, float scale = 1.0f, const D3DXCOLOR& color = 0xFFffFFff, bool mirror = false) {
+	void draw(const D3DXVECTOR2& pos, float rad = 0.0f, float scale = 1.0f, const D3DXCOLOR& color = 0xFFffFFff, bool mirror = false) {
 		draw({ 0, 0, 1, 1 }, pos, rad, scale, color, mirror);
 	}
 
-	void drawFrame(int index, D3DXVECTOR2 pos, float rad = 0.0f, float scale = 1.0f, const D3DXCOLOR& color = 0xFFffFFff, bool mirror = false) {
+	void drawFrame(int index, const D3DXVECTOR2& pos, float rad = 0.0f, float scale = 1.0f, const D3DXCOLOR& color = 0xFFffFFff, bool mirror = false) {
 		float w = 1.0f / m_col;
 		float h = 1.0f / m_row;
 
@@ -30,7 +30,7 @@ public:
 		draw(uv, pos, rad, scale, color, mirror);
 	}
 
-	void draw(TextureUV uv, D3DXVECTOR2 pos, float rad, float scale, const D3DXCOLOR& color, bool mirror) {
+	void draw(TextureUV uv, const D3DXVECTOR2& pos, float rad, float scale, const D3DXCOLOR& color, bool mirror) {
 		auto texSize = m_texture->getSize();
 		auto size = D3DXVECTOR2(texSize.x * (1.0f / m_col), texSize.y * (1.0f / m_row));
 

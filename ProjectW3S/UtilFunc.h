@@ -24,7 +24,7 @@ template <typename Type> inline void OutputDebugValue(const Type& value) {
 #endif
 }
 
-inline bool IsCollied(D3DXVECTOR3 pos1, D3DXVECTOR3 pos2, float r1, float r2) {
+inline bool IsCollied(const D3DXVECTOR3& pos1, const D3DXVECTOR3& pos2, float r1, float r2) {
 	D3DXVECTOR3 tmp = pos2 - pos1;
 	return tmp.x*tmp.x + tmp.y*tmp.y + tmp.z*tmp.z < (r1 + r2)*(r1 + r2);
 }

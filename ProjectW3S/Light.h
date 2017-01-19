@@ -5,7 +5,7 @@
 
 class Light {
 public:
-	Light(LPDIRECT3DDEVICE9 d3dDevice, D3DXVECTOR3 dir, D3DCOLORVALUE diffuse, D3DCOLORVALUE ambient, D3DCOLORVALUE specular) :
+	Light(LPDIRECT3DDEVICE9 d3dDevice, const D3DXVECTOR3& dir, const D3DCOLORVALUE& diffuse, const D3DCOLORVALUE& ambient, const D3DCOLORVALUE& specular) :
 		m_d3dDevice(d3dDevice), m_light(), m_index(0)
 	{
 		m_light.Type = D3DLIGHT_DIRECTIONAL;
@@ -17,15 +17,15 @@ public:
 		m_d3dDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 	}
 
-	void setPos(D3DXVECTOR3 pos) {
+	void setPos(const D3DXVECTOR3& pos) {
 		m_light.Position = pos;
 	}
 
-	void setDir(D3DXVECTOR3 dir) {
+	void setDir(const D3DXVECTOR3& dir) {
 		D3DXVec3Normalize((D3DXVECTOR3*)&m_light.Direction, &dir);
 	}
 
-	void setColor(D3DCOLORVALUE diffuse, D3DCOLORVALUE ambient, D3DCOLORVALUE specular) {
+	void setColor(const D3DCOLORVALUE& diffuse, const D3DCOLORVALUE& ambient, const D3DCOLORVALUE& specular) {
 		m_light.Diffuse = diffuse;
 		m_light.Ambient = ambient;
 		m_light.Specular = specular;

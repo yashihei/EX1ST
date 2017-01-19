@@ -89,7 +89,7 @@ public:
 		}
 	}
 
-	void createParticle(D3DXVECTOR3 pos, int num) {
+	void createParticle(const D3DXVECTOR3& pos, int num) {
 		for (int i = 0; i < num; i++) {
 			auto vec = D3DXVECTOR3(m_random->next(1.0f), 0, 0);
 

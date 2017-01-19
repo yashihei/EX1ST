@@ -32,21 +32,21 @@ SoundManager::~SoundManager()
 	CoUninitialize();
 }
 
-void SoundManager::load(std::string filePath, std::string alias) {
+void SoundManager::load(const std::string& filePath, const std::string& alias) {
 	auto sound = std::make_shared<Sound>(m_xAudio, filePath);
 	m_sounds[alias] = sound;
 }
 
-void SoundManager::play(std::string alias, float volume, float freqRatio, bool loop) {
+void SoundManager::play(const std::string& alias, float volume, float freqRatio, bool loop) {
 	m_sounds[alias]->init(loop);
 	m_sounds[alias]->play(volume);
 }
 
-void SoundManager::stop(std::string alias) { 
+void SoundManager::stop(const std::string& alias) { 
 	m_sounds[alias]->stop();
 }
 
-Sound::Sound(IXAudio2* xAudio, std::string filePath) : m_xAudio(xAudio), m_sourceVoice(NULL) {
+Sound::Sound(IXAudio2* xAudio, const std::string& filePath) : m_xAudio(xAudio), m_sourceVoice(NULL) {
 	m_soundBuffer = std::make_shared<SoundBuffer>(filePath);
 }
 
@@ -84,7 +84,7 @@ void Sound::stop() {
 	m_sourceVoice->Stop();
 }
 
-SoundBuffer::SoundBuffer(std::string filePath) {
+SoundBuffer::SoundBuffer(const std::string& filePath) {
 	HMMIO hMmio = NULL;
 	MMIOINFO mmioInfo = {};
 

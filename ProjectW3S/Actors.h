@@ -72,7 +72,7 @@ using PlayerPtr = std::shared_ptr<Player>;
 
 class Shot : public Actor {
 public:
-	Shot(SpritePtr sprite, CameraPtr camera, D3DXVECTOR3 pos, D3DXVECTOR3 vec) :
+	Shot(SpritePtr sprite, CameraPtr camera, const D3DXVECTOR3& pos, const D3DXVECTOR3& vec) :
 		m_sprite(sprite), m_camera(camera), m_pos(pos), m_vec(vec)
 	{}
 	void update() override {
@@ -95,7 +95,7 @@ using ShotsPtr = std::shared_ptr<ActorManager<Shot>>;
 
 class Enemy : public Actor {
 public:
-	Enemy(XModelPtr model, D3DXVECTOR3 pos, PlayerPtr player) :
+	Enemy(XModelPtr model, const D3DXVECTOR3& pos, PlayerPtr player) :
 		m_model(model), m_pos(pos), m_rot(0, 0, 0), m_player(player)
 	{}
 	void update() override {
@@ -118,7 +118,7 @@ using EnemiesPtr = std::shared_ptr<ActorManager<Enemy>>;
 
 class Particle : public Actor {
 public:
-	Particle(SpritePtr sprite, CameraPtr camera, D3DXVECTOR3 pos, D3DXVECTOR3 vec, Color color) :
+	Particle(SpritePtr sprite, CameraPtr camera, const D3DXVECTOR3& pos, const D3DXVECTOR3& vec, const Color& color) :
 		m_sprite(sprite), m_camera(camera), m_pos(pos), m_vec(vec), m_color(color), m_alpha(1.0f)
 	{}
 	void update() override {
@@ -182,10 +182,10 @@ using ScorePtr = std::shared_ptr<Score>;
 
 class TPSCamera {
 public:
-	TPSCamera(CameraPtr camera, D3DXVECTOR3 offset) :
+	TPSCamera(CameraPtr camera, const D3DXVECTOR3& offset) :
 		m_camera(camera), m_offset(offset)
 	{}
-	void update(D3DXVECTOR3 lookAt, D3DXVECTOR3 rot) {
+	void update(const D3DXVECTOR3& lookAt, const D3DXVECTOR3& rot) {
 		//カメラの動きを遅延させるため、一定フレームの動きを記録する
 		m_tracks.push_back(std::make_pair(lookAt, rot));
 		if (m_tracks.size() > 15)

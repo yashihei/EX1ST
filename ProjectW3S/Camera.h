@@ -5,7 +5,7 @@
 
 class Camera {
 public:
-	Camera(LPDIRECT3DDEVICE9 d3dDevice, D3DXVECTOR3 pos, D3DXVECTOR3 lookAt) :
+	Camera(LPDIRECT3DDEVICE9 d3dDevice, const D3DXVECTOR3& pos, const D3DXVECTOR3& lookAt) :
 		m_d3dDevice(d3dDevice), m_pos(pos), m_lookAt(lookAt), m_up(0.0f, 1.0f, 0.0f)
 	{
 		D3DVIEWPORT9 vp;
@@ -21,12 +21,12 @@ public:
 		m_d3dDevice->SetTransform(D3DTS_PROJECTION, &proj);
 	}
 
-	void moveTo(D3DXVECTOR3 pos) {
+	void moveTo(const D3DXVECTOR3& pos) {
 		m_pos = pos;
 		reflect();
 	}
 
-	void lookAt(D3DXVECTOR3 pos) {
+	void lookAt(const D3DXVECTOR3& pos) {
 		m_lookAt = pos;
 		reflect();
 	}

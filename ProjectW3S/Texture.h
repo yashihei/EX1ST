@@ -12,7 +12,7 @@ struct TextureUV {
 
 class Texture {
 public:
-	Texture(LPDIRECT3DDEVICE9 d3dDevice, std::string filePath) :
+	Texture(LPDIRECT3DDEVICE9 d3dDevice, const std::string& filePath) :
 		m_d3dDevice(d3dDevice), m_tex(), m_size(0, 0)
 	{
 		HRESULT hr = D3DXCreateTextureFromFile(m_d3dDevice, TEXT(filePath.c_str()), &m_tex);
@@ -45,11 +45,11 @@ public:
 	TextureManager(LPDIRECT3DDEVICE9 d3dDevice) :
 		m_d3dDevice(d3dDevice)
 	{}
-	void load(std::string filePath, std::string alias) {
+	void load(const std::string& filePath, const std::string& alias) {
 		m_textures[alias] = std::make_shared<Texture>(m_d3dDevice, filePath);
 	}
 	void clear() { m_textures.clear(); }
-	std::shared_ptr<Texture> getTexture(std::string alias) { return m_textures[alias]; }
+	std::shared_ptr<Texture> getTexture(const std::string& alias) { return m_textures[alias]; }
 private:
 	std::unordered_map<std::string, std::shared_ptr<Texture>> m_textures;
 	LPDIRECT3DDEVICE9 m_d3dDevice;

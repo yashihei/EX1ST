@@ -7,7 +7,7 @@
 
 class Font {
 public:
-	Font(LPDIRECT3DDEVICE9 device, int size, std::string fontName, bool bold) {
+	Font(LPDIRECT3DDEVICE9 device, int size, const std::string& fontName, bool bold) {
 		HRESULT hr = D3DXCreateFont(device,
 			size, 0, bold ? FW_BOLD : FW_NORMAL, 0, FALSE,
 			DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
@@ -22,12 +22,12 @@ public:
 			m_font->Release();
 	}
 
-	void drawStr(std::string str, Point pos, D3DCOLOR color = 0xFFFFFFFF) {
+	void drawStr(const std::string& str, const Point& pos, D3DCOLOR color = 0xFFFFFFFF) {
 		RECT rect = { pos.x, pos.y, 0, 0 };
 		m_font->DrawText(NULL, str.c_str(), -1, &rect, DT_NOCLIP, color);
 	}
 
-	static void addFont(std::string filePath) {
+	static void addFont(const std::string& filePath) {
 		if (AddFontResourceEx(filePath.c_str(), FR_PRIVATE, NULL) == 0) {
 			throw std::runtime_error("Failed load " + filePath);
 		}

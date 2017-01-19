@@ -13,9 +13,9 @@ class SoundManager {
 public:
 	SoundManager();
 	~SoundManager();
-	void load(std::string filePath, std::string alias);
-	void play(std::string alias, float volume = 1.0f, float freqRatio = 1.0f, bool loop = false);
-	void stop(std::string alias);
+	void load(const std::string& filePath, const std::string& alias);
+	void play(const std::string& alias, float volume = 1.0f, float freqRatio = 1.0f, bool loop = false);
+	void stop(const std::string& alias);
 private:
 	IXAudio2* m_xAudio;
 	IXAudio2MasteringVoice* m_masteringVoice;
@@ -26,7 +26,7 @@ using SoundManagerPtr = std::shared_ptr<SoundManager>;
 
 class Sound {
 public:
-	Sound(IXAudio2* xAudio, std::string filePath);
+	Sound(IXAudio2* xAudio, const std::string& filePath);
 	~Sound();
 	void init(bool loop = false);
 	void play(float volume = 1.0f, float freqRatio = 1.0f);
@@ -38,7 +38,7 @@ private:
 };
 
 struct SoundBuffer {
-	explicit SoundBuffer(std::string filePath);
+	explicit SoundBuffer(const std::string& filePath);
 	~SoundBuffer();
 	DWORD size;
 	WAVEFORMATEX waveFormatEx;

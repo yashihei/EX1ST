@@ -6,7 +6,7 @@
 
 class Shader {
 public:
-	Shader(LPDIRECT3DDEVICE9 d3dDevice, std::string filePath) :
+	Shader(LPDIRECT3DDEVICE9 d3dDevice, const std::string& filePath) :
 		m_d3dDevice(d3dDevice)
 	{
 		LPD3DXBUFFER err = NULL;
