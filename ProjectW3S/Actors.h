@@ -129,10 +129,12 @@ public:
 			kill();
 	}
 	void draw() override {
-		m_color.a = m_alpha;
-		m_sprite->setDiffuse(m_color.toD3Dcolor());
-		m_sprite->setVtx();
-		m_sprite->drawBillBoard(m_pos, m_camera);
+		for (int i = 0; i < 5; i++) {
+			m_color.a = m_alpha/5 * 2;
+			m_sprite->setDiffuse(m_color.toD3Dcolor());
+			m_sprite->setVtx();
+			m_sprite->drawBillBoard(m_pos + m_vec * i, m_camera, 0.75f + 0.05 * i);
+		}
 	}
 private:
 	SpritePtr m_sprite;
@@ -145,11 +147,15 @@ using ParticlesPtr = std::shared_ptr<ActorManager<Particle>>;
 
 class MiniMap {
 public:
-	MiniMap(PlayerPtr player, EnemiesPtr enemies) {
-	}
+	MiniMap(PlayerPtr player, EnemiesPtr enemies) :
+		m_player(player), m_enemies(enemies)
+	{}
 	void draw() {
 	}
 private:
+	PlayerPtr m_player;
+	EnemiesPtr m_enemies;
+	D3DXVECTOR2 m_offset;
 };
 
 class Score {

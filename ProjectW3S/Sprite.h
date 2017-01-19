@@ -36,7 +36,7 @@ public:
 			m_vtxBuf->Release();
 	}
 
-	void draw(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float scale = 1.0f) {
+	void draw(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, float scale = 1.0f) {
 		D3DXMatrixIdentity(&m_world);
 		setScale(scale, scale);
 		setRot(rot.x, rot.y, rot.z);
@@ -45,7 +45,7 @@ public:
 		render();
 	}
 
-	void drawBillBoard(D3DXVECTOR3 pos, CameraPtr camera, float scale = 1.0f) {
+	void drawBillBoard(const D3DXVECTOR3& pos, CameraPtr camera, float scale = 1.0f) {
 		D3DXMatrixIdentity(&m_world);
 		setScale(scale, scale);
 		lookCamera(camera);
@@ -54,7 +54,7 @@ public:
 		render();
 	}
 
-	void setDiffuse(D3DCOLOR diffuse) {
+	void setDiffuse(const D3DCOLOR& diffuse) {
 		for (int i = 0; i < 4; i++)
 			m_vtx[i].diffuse = diffuse;
 	}
@@ -112,7 +112,7 @@ private:
 		m_world *= rot;
 	}
 
-	void setPos(D3DXVECTOR3 pos) {
+	void setPos(const D3DXVECTOR3& pos) {
 		D3DXMATRIX trans;
 		D3DXMatrixTranslation(&trans, pos.x, pos.y, pos.z);
 		m_world *= trans;

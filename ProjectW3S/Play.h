@@ -24,6 +24,11 @@ public:
 		m_bulletSprite->setVtx();
 		m_particleSprite = std::make_shared<Sprite>(m_d3dDevice, circleTex, 0.5f, 0.5f);
 
+		auto raderTex = std::make_shared<Texture>(m_d3dDevice, "assets/rader.png");
+		m_raderSprite = std::make_shared<Sprite2D>(m_d3dDevice, raderTex);
+		auto pointTex = std::make_shared<Texture>(m_d3dDevice, "assets/point.png");
+		m_pointSprite = std::make_shared<Sprite2D>(m_d3dDevice, pointTex);
+
 		//load model
 		m_playerModel = std::make_shared<XModel>(m_d3dDevice, "assets/player.x");
 		m_enemyModel = std::make_shared<XModel>(m_d3dDevice, "assets/enemy.x");
@@ -111,7 +116,16 @@ public:
 		m_d3dDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
 		m_d3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 		m_d3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-		
+
+		//ui
+		m_raderSprite->draw({ ScreenWidth - 64 - 10, 64 + 10 }, 0, 0.5f, Color(1, 1, 1, 1.0f).toD3Dcolor());
+		for (auto& enemy : *m_enemies) {
+			auto pos = enemy->getPos() - m_player->getPos();
+			D3DXMATRIX rot;
+			D3DXMatrixRotationY(&rot, m_player->getRot().y);
+			D3DXVec3TransformCoord(&pos, &pos, &rot);
+			m_pointSprite->draw({ ScreenWidth - 64 - 10 + pos.x, 64 + 10 + pos.z }, 0, 0.5f, Color(1, 0.5, 0, 0.75f).toD3Dcolor());
+		}
 		m_score->draw();
 	}
 private:
@@ -125,6 +139,7 @@ private:
 	TPSCameraPtr m_tpsCamera;
 	LightPtr m_light;
 	SpritePtr m_groundSprite, m_bulletSprite, m_particleSprite;
+	Sprite2DPtr m_raderSprite, m_pointSprite;
 	XModelPtr m_playerModel, m_enemyModel;
 	FontPtr m_textFont;
 	PlayerPtr m_player;
