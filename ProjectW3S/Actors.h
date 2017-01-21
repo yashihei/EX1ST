@@ -35,7 +35,7 @@ public:
 
 		//pose control
 		m_rot.x = m_speed * 0.5f;
-		m_rot.z = -m_swingSpeed * 0.5f;
+		m_rot.z = -m_swingSpeed * 0.4f;
 	}
 	void draw() {
 		if (m_damageCount > 0) {
@@ -145,26 +145,6 @@ private:
 };
 using ParticlesPtr = std::shared_ptr<ActorManager<Particle>>;
 
-class MiniMap {
-public:
-	MiniMap(LPDIRECT3DDEVICE9 d3dDevice, TextureManagerPtr textureManager, PlayerPtr player, EnemiesPtr enemies) :
-		m_player(player), m_enemies(enemies), m_offset()
-	{
-		m_raderSprite = std::make_shared<Sprite2D>(d3dDevice, textureManager->get("rader"));
-		m_pointSprite = std::make_shared<Sprite2D>(d3dDevice, textureManager->get("point"));
-		m_scanSprite = std::make_shared<Sprite2D>(d3dDevice, textureManager->get("scanline"));
-	}
-	void update() {
-	}
-	void draw() {
-	}
-private:
-	PlayerPtr m_player;
-	EnemiesPtr m_enemies;
-	D3DXVECTOR2 m_offset;
-	Sprite2DPtr m_raderSprite, m_pointSprite, m_scanSprite;
-};
-
 class Score {
 public:
 	Score(FontPtr font) :
@@ -186,6 +166,28 @@ private:
 	int m_score, m_viewScore;
 };
 using ScorePtr = std::shared_ptr<Score>;
+
+class Log {
+public:
+	Log(FontPtr font) :
+		m_font(font)
+	{}
+	void draw() {
+		int cnt = 0;
+		for (auto& log : m_logs) {
+			cnt++;
+		}
+	}
+	void addLog(std::string str) {
+		m_logs.push_front(str);
+		if (m_logs.size() > 5)
+			m_logs.pop_back();
+	}
+private:
+	FontPtr m_font;
+	std::deque<std::string> m_logs;
+};
+using LogPtr = std::shared_ptr<Log>;
 
 class TPSCamera {
 public:

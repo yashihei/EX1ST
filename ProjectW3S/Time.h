@@ -9,13 +9,9 @@ public:
 	Time()
 		: m_frameCount(0), m_prevTime(0), m_deltaTime(0)
 	{
-		timeBeginPeriod(1);
 		m_prevTime = timeGetTime();
 	}
-	~Time() {
-		//FIXME
-		timeEndPeriod(1);
-	}
+	~Time() {}
 	void update() {
 		DWORD nowTime = timeGetTime();
 		m_deltaTime = nowTime - m_prevTime;

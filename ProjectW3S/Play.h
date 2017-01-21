@@ -24,9 +24,11 @@ public:
 		m_groundSprite->setDiffuse(Color(0, 0.5f, 1.0f, 0.6f).toD3Dcolor());
 		m_groundSprite->setUV({ 0, 0, 30, 30 });
 		m_groundSprite->setVtx();
+
 		m_bulletSprite = std::make_shared<Sprite>(m_d3dDevice, m_texureManager->get("circle"), 2, 2);
 		m_bulletSprite->setDiffuse(Color(1.0f, 0.7f, 0, 1.0f).toD3Dcolor());
 		m_bulletSprite->setVtx();
+
 		m_particleSprite = std::make_shared<Sprite>(m_d3dDevice, m_texureManager->get("circle"), 0.5f, 0.5f);
 
 		m_raderSprite = std::make_shared<Sprite2D>(m_d3dDevice, m_texureManager->get("rader"));
@@ -39,12 +41,12 @@ public:
 		m_XModelManager->load("assets/enemy.x", "enemy");
 
 		m_textFont = std::make_shared<Font>(m_d3dDevice, 30, "Orbitron", false);
-		m_score = std::make_shared<Score>(m_textFont);
 
 		m_player = std::make_shared<Player>(m_inputManager, m_XModelManager->get("player"));
 		m_shots = std::make_shared<ActorManager<Shot>>();
 		m_enemies = std::make_shared<ActorManager<Enemy>>();
 		m_particles = std::make_shared<ActorManager<Particle>>();
+		m_score = std::make_shared<Score>(m_textFont);
 	}
 	void update() override {
 		m_count++;
