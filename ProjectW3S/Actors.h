@@ -147,15 +147,22 @@ using ParticlesPtr = std::shared_ptr<ActorManager<Particle>>;
 
 class MiniMap {
 public:
-	MiniMap(PlayerPtr player, EnemiesPtr enemies) :
-		m_player(player), m_enemies(enemies)
-	{}
+	MiniMap(LPDIRECT3DDEVICE9 d3dDevice, TextureManagerPtr textureManager, PlayerPtr player, EnemiesPtr enemies) :
+		m_player(player), m_enemies(enemies), m_offset()
+	{
+		m_raderSprite = std::make_shared<Sprite2D>(d3dDevice, textureManager->get("rader"));
+		m_pointSprite = std::make_shared<Sprite2D>(d3dDevice, textureManager->get("point"));
+		m_scanSprite = std::make_shared<Sprite2D>(d3dDevice, textureManager->get("scanline"));
+	}
+	void update() {
+	}
 	void draw() {
 	}
 private:
 	PlayerPtr m_player;
 	EnemiesPtr m_enemies;
 	D3DXVECTOR2 m_offset;
+	Sprite2DPtr m_raderSprite, m_pointSprite, m_scanSprite;
 };
 
 class Score {

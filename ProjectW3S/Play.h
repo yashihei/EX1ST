@@ -13,30 +13,35 @@ public:
 		m_light = std::make_shared<Light>(m_d3dDevice, D3DXVECTOR3(0, -1, 0), D3DCOLORVALUE{1.0f, 1.0f, 1.0f, 1.0f}, D3DCOLORVALUE{0.5f, 0.5f, 0.5f, 1.0f}, D3DCOLORVALUE{1.0f, 1.0f, 1.0f, 1.0f});
 
 		//load tex and create sprite
-		auto gridTex = std::make_shared<Texture>(m_d3dDevice, "assets/grid.png");
-		m_groundSprite = std::make_shared<Sprite>(m_d3dDevice, gridTex, 100, 100);
+		m_texureManager = std::make_shared<TextureManager>(m_d3dDevice);
+		m_texureManager->load("assets/grid.png", "grid");
+		m_texureManager->load("assets/circle.png", "circle");
+		m_texureManager->load("assets/rader.png", "rader");
+		m_texureManager->load("assets/point.png", "point");
+		m_texureManager->load("assets/scanline.png", "scanline");
+
+		m_groundSprite = std::make_shared<Sprite>(m_d3dDevice, m_texureManager->get("grid"), 100, 100);
 		m_groundSprite->setDiffuse(Color(0, 0.5f, 1.0f, 0.6f).toD3Dcolor());
 		m_groundSprite->setUV({ 0, 0, 30, 30 });
 		m_groundSprite->setVtx();
-		auto circleTex = std::make_shared<Texture>(m_d3dDevice, "assets/circle.png");
-		m_bulletSprite = std::make_shared<Sprite>(m_d3dDevice, circleTex, 2, 2);
+		m_bulletSprite = std::make_shared<Sprite>(m_d3dDevice, m_texureManager->get("circle"), 2, 2);
 		m_bulletSprite->setDiffuse(Color(1.0f, 0.7f, 0, 1.0f).toD3Dcolor());
 		m_bulletSprite->setVtx();
-		m_particleSprite = std::make_shared<Sprite>(m_d3dDevice, circleTex, 0.5f, 0.5f);
+		m_particleSprite = std::make_shared<Sprite>(m_d3dDevice, m_texureManager->get("circle"), 0.5f, 0.5f);
 
-		auto raderTex = std::make_shared<Texture>(m_d3dDevice, "assets/rader.png");
-		m_raderSprite = std::make_shared<Sprite2D>(m_d3dDevice, raderTex);
-		auto pointTex = std::make_shared<Texture>(m_d3dDevice, "assets/point.png");
-		m_pointSprite = std::make_shared<Sprite2D>(m_d3dDevice, pointTex);
+		m_raderSprite = std::make_shared<Sprite2D>(m_d3dDevice, m_texureManager->get("rader"));
+		m_pointSprite = std::make_shared<Sprite2D>(m_d3dDevice, m_texureManager->get("point"));
+		m_scanSprite = std::make_shared<Sprite2D>(m_d3dDevice, m_texureManager->get("scanline"));
 
 		//load model
-		m_playerModel = std::make_shared<XModel>(m_d3dDevice, "assets/player.x");
-		m_enemyModel = std::make_shared<XModel>(m_d3dDevice, "assets/enemy.x");
+		m_XModelManager = std::make_shared<XModelManager>(m_d3dDevice);
+		m_XModelManager->load("assets/player.x", "player");
+		m_XModelManager->load("assets/enemy.x", "enemy");
 
 		m_textFont = std::make_shared<Font>(m_d3dDevice, 30, "Orbitron", false);
 		m_score = std::make_shared<Score>(m_textFont);
 
-		m_player = std::make_shared<Player>(m_inputManager, m_playerModel);
+		m_player = std::make_shared<Player>(m_inputManager, m_XModelManager->get("player"));
 		m_shots = std::make_shared<ActorManager<Shot>>();
 		m_enemies = std::make_shared<ActorManager<Enemy>>();
 		m_particles = std::make_shared<ActorManager<Particle>>();
@@ -62,8 +67,8 @@ public:
 		}
 
 		//spown
-		if (m_count % 100 == 0) {
-			auto enemy = std::make_shared<Enemy>(m_enemyModel, D3DXVECTOR3(m_random->nextPlusMinus(50), 1, m_random->nextPlusMinus(50)), m_player);
+		if (m_count % 60 == 0) {
+			auto enemy = std::make_shared<Enemy>(m_XModelManager->get("enemy"), D3DXVECTOR3(m_random->nextPlusMinus(50), 1, m_random->nextPlusMinus(50)), m_player);
 			m_enemies->add(enemy);
 		}
 		
@@ -73,7 +78,7 @@ public:
 				if (IsCollied(shot->getPos(), enemy->getPos(), 1, 1)) {
 					enemy->kill();
 					shot->kill();
-					createParticle(enemy->getPos(), 50);
+					createParticle(enemy->getPos(), 35);
 					m_score->addScore(100);
 					break;
 				}
@@ -118,14 +123,19 @@ public:
 		m_d3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 
 		//ui
-		m_raderSprite->draw({ ScreenWidth - 64 - 10, 64 + 10 }, 0, 0.5f, Color(1, 1, 1, 1.0f).toD3Dcolor());
+		const D3DXVECTOR2 offset(ScreenWidth - 64 - 15, 64 + 15);
+		m_raderSprite->draw(offset, 0, 1.0f, Color(1, 1, 1, 0.75f).toD3Dcolor());
 		for (auto& enemy : *m_enemies) {
-			auto pos = enemy->getPos() - m_player->getPos();
+			auto pos = m_player->getPos() - enemy->getPos();
+			auto pos2d = D3DXVECTOR2(pos.x, pos.z);
+			if (D3DXVec2Length(&pos2d) > 64)
+				continue;
 			D3DXMATRIX rot;
-			D3DXMatrixRotationY(&rot, m_player->getRot().y);
+			D3DXMatrixRotationY(&rot, -m_player->getRot().y);
 			D3DXVec3TransformCoord(&pos, &pos, &rot);
-			m_pointSprite->draw({ ScreenWidth - 64 - 10 + pos.x, 64 + 10 + pos.z }, 0, 0.5f, Color(1, 0.5, 0, 0.75f).toD3Dcolor());
+			m_pointSprite->draw(offset + D3DXVECTOR2(pos.z, pos.x), 0, 0.5f, Color(1, 0.25, 0, 0.75f).toD3Dcolor());
 		}
+		m_scanSprite->draw(offset, 0.02 * m_count);
 		m_score->draw();
 	}
 private:
@@ -138,9 +148,10 @@ private:
 	CameraPtr m_camera;
 	TPSCameraPtr m_tpsCamera;
 	LightPtr m_light;
+	TextureManagerPtr m_texureManager;
 	SpritePtr m_groundSprite, m_bulletSprite, m_particleSprite;
-	Sprite2DPtr m_raderSprite, m_pointSprite;
-	XModelPtr m_playerModel, m_enemyModel;
+	Sprite2DPtr m_raderSprite, m_pointSprite, m_scanSprite;
+	XModelManagerPtr m_XModelManager;
 	FontPtr m_textFont;
 	PlayerPtr m_player;
 	ShotsPtr m_shots;

@@ -41,6 +41,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 	} catch (const std::runtime_error& error) {
 		MessageBox(NULL, error.what(), "Runtime error", MB_OK | MB_ICONERROR);
+	} catch (const std::out_of_range& error) {
+		MessageBox(NULL, error.what(), "Out of Range", MB_OK | MB_ICONERROR);
 	} catch (...) {
 		MessageBox(NULL, TEXT("Unknown error"), "Error", MB_OK | MB_ICONERROR);
 	}

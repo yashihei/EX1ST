@@ -49,7 +49,11 @@ public:
 		m_textures[alias] = std::make_shared<Texture>(m_d3dDevice, filePath);
 	}
 	void clear() { m_textures.clear(); }
-	std::shared_ptr<Texture> getTexture(const std::string& alias) { return m_textures[alias]; }
+	std::shared_ptr<Texture> get(const std::string& alias) {
+		if (m_textures.count(alias) == 0)
+			throw std::out_of_range("Not Found " + alias);
+		return m_textures[alias];
+	}
 private:
 	std::unordered_map<std::string, std::shared_ptr<Texture>> m_textures;
 	LPDIRECT3DDEVICE9 m_d3dDevice;

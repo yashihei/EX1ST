@@ -78,3 +78,24 @@ private:
 };
 
 using XModelPtr = std::shared_ptr<XModel>;
+
+class XModelManager {
+public:
+	XModelManager(LPDIRECT3DDEVICE9 d3dDevice) :
+		m_d3dDevice(d3dDevice)
+	{}
+	void load(const std::string& filePath, const std::string& alias) {
+		m_models[alias] = std::make_shared<XModel>(m_d3dDevice, filePath);
+	}
+	void clear() { m_models.clear(); }
+	std::shared_ptr<XModel> get(const std::string& alias) {
+		if (m_models.count(alias) == 0)
+			throw std::out_of_range("Not Found " + alias);
+		return m_models[alias];
+	}
+private:
+	std::unordered_map<std::string, std::shared_ptr<XModel>> m_models;
+	LPDIRECT3DDEVICE9 m_d3dDevice;
+};
+
+using XModelManagerPtr = std::shared_ptr<XModelManager>;

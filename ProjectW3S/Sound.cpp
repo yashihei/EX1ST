@@ -38,11 +38,15 @@ void SoundManager::load(const std::string& filePath, const std::string& alias) {
 }
 
 void SoundManager::play(const std::string& alias, float volume, float freqRatio, bool loop) {
+	if (m_sounds.count(alias) == 0)
+		throw std::out_of_range("Not Found " + alias);
 	m_sounds[alias]->init(loop);
 	m_sounds[alias]->play(volume);
 }
 
 void SoundManager::stop(const std::string& alias) { 
+	if (m_sounds.count(alias) == 0)
+		throw std::out_of_range("Not Found " + alias);
 	m_sounds[alias]->stop();
 }
 
