@@ -45,11 +45,13 @@ public:
 			m_model->draw(m_pos, m_rot + D3DXVECTOR3(0, D3DX_PI/2, 0));
 		}
 	}
-	void damage() {
+	bool damage() {
 		if (m_damageCount < 0) {
 			m_hp--;
 			m_damageCount = 120;
+			return true;
 		}
+		return false;
 	}
 	bool isAlived() {
 		if (m_hp > 0)
@@ -116,6 +118,51 @@ private:
 };
 using EnemiesPtr = std::shared_ptr<ActorManager<Enemy>>;
 
+class Ray : public Actor {
+public:
+	Ray(SpritePtr sprite, CameraPtr camera, std::weak_ptr<Enemy> target, D3DXVECTOR3 pos, float rotY) :
+		m_sprite(sprite), m_camera(camera), m_target(target), m_pos(pos), m_rotY(rotY), m_speed(0.5), m_count(0)
+	{}
+	void update() override {
+		m_count++;
+
+		if (auto enemy = m_target.lock()) {
+			const D3DXVECTOR3 targetPos = enemy->getPos();
+			float aimRad = std::atan2(targetPos.z - m_pos.z, targetPos.x - m_pos.x);
+			if (m_rotY - D3DX_PI > aimRad)
+				aimRad += D3DX_PI * 2;
+			if (m_rotY + D3DX_PI < aimRad)
+				aimRad -= D3DX_PI * 2;
+
+			const float limitRad = D3DX_PI / 180 * 5;
+			if (m_rotY - aimRad > limitRad)
+				m_rotY += limitRad;
+			else if (m_rotY - aimRad < -limitRad)
+				m_rotY += limitRad;
+			else
+				m_rotY = aimRad;
+		}
+
+		m_pos.x += std::cos(m_rotY) * m_speed;
+		m_pos.z += std::sin(m_rotY) * m_speed;
+
+		if (m_count > 600)
+			kill();
+	}
+	void draw() override {
+		m_sprite->drawBillBoard(m_pos, m_camera);
+	}
+private:
+	SpritePtr m_sprite;
+	CameraPtr m_camera;
+	std::weak_ptr<Enemy> m_target;
+	D3DXVECTOR3 m_pos;
+	float m_rotY, m_speed;
+	std::deque<D3DXVECTOR3> m_tracks;
+	int m_count;
+};
+using RaysPtr = std::shared_ptr<ActorManager<Ray>>;
+
 class Particle : public Actor {
 public:
 	Particle(SpritePtr sprite, CameraPtr camera, const D3DXVECTOR3& pos, const D3DXVECTOR3& vec, const Color& color) :
@@ -133,7 +180,7 @@ public:
 			m_color.a = m_alpha/5 * 2;
 			m_sprite->setDiffuse(m_color.toD3Dcolor());
 			m_sprite->setVtx();
-			m_sprite->drawBillBoard(m_pos + m_vec * i, m_camera, 0.75f + 0.05 * i);
+			m_sprite->drawBillBoard(m_pos + m_vec * i, m_camera, 0.75f + 0.05f * i);
 		}
 	}
 private:

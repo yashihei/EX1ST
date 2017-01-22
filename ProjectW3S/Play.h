@@ -20,12 +20,12 @@ public:
 		m_texureManager->load("assets/point.png", "point");
 		m_texureManager->load("assets/scanline.png", "scanline");
 
-		m_groundSprite = std::make_shared<Sprite>(m_d3dDevice, m_texureManager->get("grid"), 100, 100);
+		m_groundSprite = std::make_shared<Sprite>(m_d3dDevice, m_texureManager->get("grid"), 100.0f, 100.0f);
 		m_groundSprite->setDiffuse(Color(0, 0.5f, 1.0f, 0.6f).toD3Dcolor());
 		m_groundSprite->setUV({ 0, 0, 30, 30 });
 		m_groundSprite->setVtx();
 
-		m_bulletSprite = std::make_shared<Sprite>(m_d3dDevice, m_texureManager->get("circle"), 2, 2);
+		m_bulletSprite = std::make_shared<Sprite>(m_d3dDevice, m_texureManager->get("circle"), 2.0f, 2.0f);
 		m_bulletSprite->setDiffuse(Color(1.0f, 0.7f, 0, 1.0f).toD3Dcolor());
 		m_bulletSprite->setVtx();
 
@@ -80,7 +80,7 @@ public:
 		//spown
 		if (m_count % 60 == 0) {
 			//TODO:—N‚«‚ð‰“‚­‚É
-			auto enemy = std::make_shared<Enemy>(m_XModelManager->get("enemy"), D3DXVECTOR3(m_random->nextPlusMinus(50), 1, m_random->nextPlusMinus(50)), m_player);
+			auto enemy = std::make_shared<Enemy>(m_XModelManager->get("enemy"), D3DXVECTOR3(m_random->nextPlusMinus(50.0f), 1, m_random->nextPlusMinus(50.0f)), m_player);
 			m_enemies->add(enemy);
 		}
 		
@@ -148,7 +148,7 @@ public:
 			D3DXVec3TransformCoord(&pos, &pos, &rot);
 			m_pointSprite->draw(offset + D3DXVECTOR2(pos.z, pos.x), 0, 0.5f, Color(1, 0.25, 0, 0.75f).toD3Dcolor());
 		}
-		m_scanSprite->draw(offset, 0.02 * m_count);
+		m_scanSprite->draw(offset, 0.02f * m_count);
 		m_score->draw();
 	}
 private:
