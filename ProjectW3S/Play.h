@@ -42,6 +42,10 @@ public:
 
 		m_textFont = std::make_shared<Font>(m_d3dDevice, 30, "Orbitron", false);
 
+		//load sounds
+		m_soundManager->load("assets/bom.wav", "bom");
+		m_soundManager->load("assets/shoot.wav", "shoot");
+
 		m_player = std::make_shared<Player>(m_inputManager, m_XModelManager->get("player"));
 		m_shots = std::make_shared<ActorManager<Shot>>();
 		m_enemies = std::make_shared<ActorManager<Enemy>>();
@@ -66,10 +70,12 @@ public:
 			auto vec = D3DXVECTOR3(3 * std::cos(m_player->getRot().y), 0.0f, -3 * std::sin(m_player->getRot().y));
 			auto shot = std::make_shared<Shot>(m_bulletSprite, m_camera, m_player->getPos() + vec, vec);
 			m_shots->add(shot);
+			m_soundManager->play("shoot", 0.5f);
 		}
 
 		//spown
 		if (m_count % 60 == 0) {
+			//TODO:—N‚«‚ð‰“‚­‚É
 			auto enemy = std::make_shared<Enemy>(m_XModelManager->get("enemy"), D3DXVECTOR3(m_random->nextPlusMinus(50), 1, m_random->nextPlusMinus(50)), m_player);
 			m_enemies->add(enemy);
 		}
@@ -82,6 +88,7 @@ public:
 					shot->kill();
 					createParticle(enemy->getPos(), 35);
 					m_score->addScore(100);
+					m_soundManager->play("bom", 0.5f);
 					break;
 				}
 			}
