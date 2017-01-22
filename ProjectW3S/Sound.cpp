@@ -4,7 +4,7 @@
 #include <vector>
 
 SoundManager::SoundManager() :
-m_xAudio(NULL), m_masteringVoice(NULL)
+m_xAudio(NULL), m_masteringVoice(NULL), m_muting(false)
 {
 	CoInitializeEx(NULL, COINIT_MULTITHREADED);
 	
@@ -37,9 +37,11 @@ void SoundManager::load(const std::string& filePath, const std::string& alias) {
 	m_sounds[alias] = sound;
 }
 
-void SoundManager::play(const std::string& alias, float volume, float freqRatio, bool loop) {
+void SoundManager::play(const std::string& alias, float volume, bool loop) {
 	if (m_sounds.count(alias) == 0)
 		throw std::out_of_range("Not Found " + alias);
+	if (m_muting)
+		return;
 	m_sounds[alias]->init(loop);
 	m_sounds[alias]->play(volume);
 }

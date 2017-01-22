@@ -45,6 +45,8 @@ public:
 		//load sounds
 		m_soundManager->load("assets/bom.wav", "bom");
 		m_soundManager->load("assets/shoot.wav", "shoot");
+		m_soundManager->load("assets/bgm.wav", "bgm");
+		m_soundManager->play("bgm", 1.0f, true);
 
 		m_player = std::make_shared<Player>(m_inputManager, m_XModelManager->get("player"));
 		m_shots = std::make_shared<ActorManager<Shot>>();
@@ -55,7 +57,9 @@ public:
 	void update() override {
 		m_count++;
 		if (!m_player->isAlived()) {
+			m_soundManager->clear();
 			changeScene(SceneType::Title);
+			return;
 		}
 
 		m_player->update();
@@ -70,7 +74,7 @@ public:
 			auto vec = D3DXVECTOR3(3 * std::cos(m_player->getRot().y), 0.0f, -3 * std::sin(m_player->getRot().y));
 			auto shot = std::make_shared<Shot>(m_bulletSprite, m_camera, m_player->getPos() + vec, vec);
 			m_shots->add(shot);
-			m_soundManager->play("shoot", 0.5f);
+			m_soundManager->play("shoot", 0.35f);
 		}
 
 		//spown
