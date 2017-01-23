@@ -24,7 +24,7 @@ public:
 
 		if (m_fadeFlag) {
 			m_fadeCount++;
-			if (m_fadeCount > 110)
+			if (m_fadeCount > 100)
 				changeScene(SceneType::Play);
 		}
 		if (m_inputManager->isClickedButton()) {
@@ -48,7 +48,7 @@ public:
 		m_textFont->drawStr("PUSH TO START", { 30, 540 });
 		m_groundSprite->draw({ 0, 0, 0 }, { D3DX_PI/2, m_groundRot, 0 });
 		if (m_fadeFlag)
-			fade(255 / 120.0f * m_fadeCount);
+			fade(255 / 100.0f * m_fadeCount);
 	}
 private:
 	void fade(int alpha) {

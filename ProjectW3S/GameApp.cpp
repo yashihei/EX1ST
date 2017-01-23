@@ -10,6 +10,10 @@ GameApp::GameApp(HWND hWnd, HINSTANCE hInstance, bool fullScreen) {
 	m_fpsControler = std::make_shared<FPSControler>(60);
 	m_random = std::make_shared<Random>();
 	Font::addFont("assets/orbitron-light.otf");
+	//load sounds
+	m_soundManager->load("assets/bom.wav", "bom");
+	m_soundManager->load("assets/shoot.wav", "shoot");
+	m_soundManager->load("assets/bgm.wav", "bgm");
 	changeScene(SceneType::Title);
 }
 

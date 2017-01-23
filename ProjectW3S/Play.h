@@ -16,6 +16,7 @@ public:
 		m_texureManager = std::make_shared<TextureManager>(m_d3dDevice);
 		m_texureManager->load("assets/grid.png", "grid");
 		m_texureManager->load("assets/circle.png", "circle");
+		m_texureManager->load("assets/shadow.png", "shadow");
 		m_texureManager->load("assets/rader.png", "rader");
 		m_texureManager->load("assets/point.png", "point");
 		m_texureManager->load("assets/scanline.png", "scanline");
@@ -28,6 +29,10 @@ public:
 		m_bulletSprite = std::make_shared<Sprite>(m_d3dDevice, m_texureManager->get("circle"), 2.0f, 2.0f);
 		m_bulletSprite->setDiffuse(Color(1.0f, 0.7f, 0, 1.0f).toD3Dcolor());
 		m_bulletSprite->setVtx();
+
+		m_shadowSprite = std::make_shared<Sprite>(m_d3dDevice, m_texureManager->get("shadow"), 64);
+		m_shadowSprite->setDiffuse(Color(1.0f, 1.0f, 1.0f, 0.15f).toD3Dcolor());
+		m_shadowSprite->setVtx();
 
 		m_particleSprite = std::make_shared<Sprite>(m_d3dDevice, m_texureManager->get("circle"), 0.5f, 0.5f);
 
@@ -42,22 +47,18 @@ public:
 
 		m_textFont = std::make_shared<Font>(m_d3dDevice, 30, "Orbitron", false);
 
-		//load sounds
-		m_soundManager->load("assets/bom.wav", "bom");
-		m_soundManager->load("assets/shoot.wav", "shoot");
-		m_soundManager->load("assets/bgm.wav", "bgm");
-		m_soundManager->play("bgm", 1.0f, true);
-
 		m_player = std::make_shared<Player>(m_inputManager, m_XModelManager->get("player"));
 		m_shots = std::make_shared<ActorManager<Shot>>();
 		m_enemies = std::make_shared<ActorManager<Enemy>>();
 		m_particles = std::make_shared<ActorManager<Particle>>();
 		m_score = std::make_shared<Score>(m_textFont);
+
+		m_soundManager->play("bgm", 1.0f, true);
 	}
 	void update() override {
 		m_count++;
 		if (!m_player->isAlived()) {
-			m_soundManager->clear();
+			m_soundManager->stop("bgm");
 			changeScene(SceneType::Title);
 			return;
 		}
@@ -130,6 +131,9 @@ public:
 		m_shots->draw();
 
 		DisableZBuf(m_d3dDevice);
+		EnebleSubBlend(m_d3dDevice);
+		m_shadowSprite->draw({ m_player->getPos().x, 0, m_player->getPos().z }, { D3DX_PI / 2, 0, 0 }, 2.5f);
+		EnebleAddBlend(m_d3dDevice);
 		m_particles->draw();
 		EnebleZBuf(m_d3dDevice);
 
@@ -148,7 +152,10 @@ public:
 			D3DXVec3TransformCoord(&pos, &pos, &rot);
 			m_pointSprite->draw(offset + D3DXVECTOR2(pos.z, pos.x), 0, 0.5f, Color(1, 0.25, 0, 0.75f).toD3Dcolor());
 		}
+		EnebleAddBlend(m_d3dDevice);
 		m_scanSprite->draw(offset, 0.02f * m_count);
+		EnebleNormalBlend(m_d3dDevice);
+
 		m_score->draw();
 	}
 private:
@@ -162,7 +169,7 @@ private:
 	TPSCameraPtr m_tpsCamera;
 	LightPtr m_light;
 	TextureManagerPtr m_texureManager;
-	SpritePtr m_groundSprite, m_bulletSprite, m_particleSprite;
+	SpritePtr m_groundSprite, m_bulletSprite, m_particleSprite, m_shadowSprite;
 	Sprite2DPtr m_raderSprite, m_pointSprite, m_scanSprite;
 	XModelManagerPtr m_XModelManager;
 	FontPtr m_textFont;
