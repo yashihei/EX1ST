@@ -26,7 +26,7 @@ public:
 		m_groundSprite->setUV({ 0, 0, 30, 30 });
 		m_groundSprite->setVtx();
 
-		m_bulletSprite = std::make_shared<Sprite>(m_d3dDevice, m_texureManager->get("circle"), 2.0f, 2.0f);
+		m_bulletSprite = std::make_shared<Sprite>(m_d3dDevice, m_texureManager->get("circle"), 64);
 		m_bulletSprite->setDiffuse(Color(1.0f, 0.7f, 0, 1.0f).toD3Dcolor());
 		m_bulletSprite->setVtx();
 
@@ -34,7 +34,7 @@ public:
 		m_shadowSprite->setDiffuse(Color(1.0f, 1.0f, 1.0f, 0.15f).toD3Dcolor());
 		m_shadowSprite->setVtx();
 
-		m_particleSprite = std::make_shared<Sprite>(m_d3dDevice, m_texureManager->get("circle"), 0.5f, 0.5f);
+		m_particleSprite = std::make_shared<Sprite>(m_d3dDevice, m_texureManager->get("circle"), 64);
 
 		m_raderSprite = std::make_shared<Sprite2D>(m_d3dDevice, m_texureManager->get("rader"));
 		m_pointSprite = std::make_shared<Sprite2D>(m_d3dDevice, m_texureManager->get("point"));

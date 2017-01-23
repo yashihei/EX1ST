@@ -84,7 +84,7 @@ public:
 			kill();
 	}
 	void draw() override {
-		m_sprite->drawBillBoard(m_pos, m_camera);
+		m_sprite->drawBillBoard(m_pos, m_camera, 2.0f);
 	}
 	D3DXVECTOR3 getPos() const { return m_pos; }
 private:
@@ -180,7 +180,7 @@ public:
 			m_color.a = m_alpha/5 * 2;
 			m_sprite->setDiffuse(m_color.toD3Dcolor());
 			m_sprite->setVtx();
-			m_sprite->drawBillBoard(m_pos + m_vec/1.5f * i, m_camera, 0.75f + 0.1f * i);
+			m_sprite->drawBillBoard(m_pos + m_vec/1.5f * i, m_camera, 0.375f + 0.05f * i);
 		}
 	}
 private:
