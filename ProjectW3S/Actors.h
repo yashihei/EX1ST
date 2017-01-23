@@ -35,7 +35,7 @@ public:
 
 		//pose control
 		m_rot.x = m_speed * 0.5f;
-		m_rot.z = -m_swingSpeed * 0.4f;
+		m_rot.z = -m_swingSpeed * 0.35f;
 	}
 	void draw() {
 		if (m_damageCount > 0) {
@@ -205,8 +205,7 @@ public:
 			m_viewScore += (m_score - m_viewScore) / 10 + 1;
 	}
 	void draw() {
-		m_font->drawStr("SCORE : " + std::to_string(m_viewScore), { 12, 12 }, Color(0, 0, 0, 1).toD3Dcolor());
-		m_font->drawStr("SCORE : " + std::to_string(m_viewScore), { 10, 10 });
+		m_font->drawStr("SCORE : " + std::to_string(m_viewScore), { 15, 10 });
 	}
 private:
 	FontPtr m_font;

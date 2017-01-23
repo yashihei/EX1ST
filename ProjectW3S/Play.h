@@ -21,6 +21,7 @@ public:
 		m_texureManager->load("assets/point.png", "point");
 		m_texureManager->load("assets/scanline.png", "scanline");
 
+		//create sprites
 		m_groundSprite = std::make_shared<Sprite>(m_d3dDevice, m_texureManager->get("grid"), 100.0f, 100.0f);
 		m_groundSprite->setDiffuse(Color(0, 0.5f, 1.0f, 0.6f).toD3Dcolor());
 		m_groundSprite->setUV({ 0, 0, 30, 30 });
@@ -36,6 +37,7 @@ public:
 
 		m_particleSprite = std::make_shared<Sprite>(m_d3dDevice, m_texureManager->get("circle"), 64);
 
+		//ui sprites
 		m_raderSprite = std::make_shared<Sprite2D>(m_d3dDevice, m_texureManager->get("rader"));
 		m_pointSprite = std::make_shared<Sprite2D>(m_d3dDevice, m_texureManager->get("point"));
 		m_scanSprite = std::make_shared<Sprite2D>(m_d3dDevice, m_texureManager->get("scanline"));
@@ -47,6 +49,7 @@ public:
 
 		m_textFont = std::make_shared<Font>(m_d3dDevice, 30, "Orbitron", false);
 
+		//create actors
 		m_player = std::make_shared<Player>(m_inputManager, m_XModelManager->get("player"));
 		m_shots = std::make_shared<ActorManager<Shot>>();
 		m_enemies = std::make_shared<ActorManager<Enemy>>();
@@ -157,6 +160,8 @@ public:
 		EnebleNormalBlend(m_d3dDevice);
 
 		m_score->draw();
+		m_textFont->drawStr("LIFE :", { 15, 40 });
+		m_textFont->drawStr(std::to_string(m_player->getHP()), {95, 40}, Color(1.0f, 0.5f, 0.5f).toD3Dcolor());
 	}
 private:
 	LPDIRECT3DDEVICE9 m_d3dDevice;
