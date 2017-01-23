@@ -108,6 +108,9 @@
     <ClInclude Include="Actors.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Render.h">
+      <Filter>Header Files\hks\dx9</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics.cpp">

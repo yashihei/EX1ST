@@ -180,7 +180,7 @@ public:
 			m_color.a = m_alpha/5 * 2;
 			m_sprite->setDiffuse(m_color.toD3Dcolor());
 			m_sprite->setVtx();
-			m_sprite->drawBillBoard(m_pos + m_vec * i, m_camera, 0.75f + 0.05f * i);
+			m_sprite->drawBillBoard(m_pos + m_vec/1.5f * i, m_camera, 0.75f + 0.1f * i);
 		}
 	}
 private:

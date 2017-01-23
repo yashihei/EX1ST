@@ -30,6 +30,7 @@ static const int ScreenHeight = 600;
 #include "XModel.h"
 #include "Sprite.h"
 #include "Sprite2D.h"
+#include "Render.h"
 
 //--------------------------------------------------------------------------------
 // •Ö—˜ƒwƒbƒ_

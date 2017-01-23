@@ -125,15 +125,15 @@ public:
 		m_enemies->draw();
 
 		//draw sprites
-		m_d3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-		m_d3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+		EnebleAddBlend(m_d3dDevice);
 		m_groundSprite->draw({ 0, 0, 0 }, { D3DX_PI/2, 0, 0 });
 		m_shots->draw();
-		m_d3dDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_ALWAYS);
+
+		DisableZBuf(m_d3dDevice);
 		m_particles->draw();
-		m_d3dDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
-		m_d3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-		m_d3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+		EnebleZBuf(m_d3dDevice);
+
+		EnebleNormalBlend(m_d3dDevice);
 
 		//ui
 		const D3DXVECTOR2 offset(ScreenWidth - 64 - 15, 64 + 15);
