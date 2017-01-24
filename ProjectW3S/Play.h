@@ -179,7 +179,14 @@ public:
 		m_textFont->drawStr(std::to_string(m_player->getHP()), {95, 40}, Color(1.0f, 0.5f, 0.5f).toD3Dcolor());
 
 		if (!m_player->isAlived()) {
+			float pad = m_resultCount < 30 ? Easing::OutQuint(m_resultCount, 30, 0, 65) : 65;
+			drawRectangle2D(m_d3dDevice, {0, 300 - pad}, {800, 300 + pad}, Color(0.5f, 0.5f, 0.5f, 0.6f).toD3Dcolor());
+			m_textFont->drawStr("GAME OVER", { 317, 260 });
+			m_textFont->drawStr("SCORE " + std::to_string(m_score->getScore()), { 317, 310 });
 		}
+		//fadeout
+		//if (m_count < 30)
+		//	drawRectangle2D(m_d3dDevice, {0, 0}, {800, 600}, Color(0, 0, 0, 1.0f - 1.0f / 30.0f * m_count).toD3Dcolor());
 	}
 private:
 	LPDIRECT3DDEVICE9 m_d3dDevice;

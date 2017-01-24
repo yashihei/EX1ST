@@ -48,27 +48,9 @@ public:
 		m_textFont->drawStr("PUSH TO START", { 30, 540 });
 		m_groundSprite->draw({ 0, 0, 0 }, { D3DX_PI/2, m_groundRot, 0 });
 		if (m_fadeFlag)
-			fade(255 / 100.0f * m_fadeCount);
+			drawRectangle2D(m_d3dDevice, {0, 0}, {800, 600}, Color(0, 0, 0, 1.0f / 100.0f * m_fadeCount).toD3Dcolor());
 	}
 private:
-	void fade(int alpha) {
-		struct PlateVtx {
-			D3DXVECTOR3 pos;
-			float rhw;
-			DWORD color;
-		};
-		float w = ScreenWidth; float h = ScreenHeight;
-		std::vector<PlateVtx> vtx {
-			{{0, 0, 0}, 1.0f, D3DCOLOR_ARGB(alpha, 0, 0, 0)},
-			{{w, 0, 0}, 1.0f, D3DCOLOR_ARGB(alpha, 0, 0, 0)},
-			{{0, h, 0}, 1.0f, D3DCOLOR_ARGB(alpha, 0, 0, 0)},
-			{{w, h, 0}, 1.0f, D3DCOLOR_ARGB(alpha, 0, 0, 0)},
-		};
-		m_d3dDevice->SetTexture(0, NULL);
-		m_d3dDevice->SetFVF(D3DFVF_XYZRHW | D3DFVF_DIFFUSE);
-		m_d3dDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, vtx.data(), sizeof(PlateVtx));
-	}
-
 	LPDIRECT3DDEVICE9 m_d3dDevice;
 	InputManagerPtr m_inputManager;
 	RandomPtr m_random;

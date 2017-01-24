@@ -237,6 +237,7 @@ public:
 	void draw() {
 		m_font->drawStr("SCORE : " + std::to_string(m_viewScore), { 15, 10 });
 	}
+	int getScore() const { return m_score; }
 private:
 	FontPtr m_font;
 	int m_score, m_viewScore;
