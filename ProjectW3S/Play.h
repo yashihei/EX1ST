@@ -6,7 +6,8 @@
 class Play : public Scene {
 public:
 	Play(LPDIRECT3DDEVICE9 d3dDevice, InputManagerPtr input, SoundManagerPtr sound, RandomPtr random) :
-		m_d3dDevice(d3dDevice), m_inputManager(input), m_soundManager(sound), m_random(random)
+		m_d3dDevice(d3dDevice), m_inputManager(input), m_soundManager(sound), m_random(random),
+		m_count(0), m_resultCount(0)
 	{
 		m_camera = std::make_shared<Camera>(m_d3dDevice, D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0));
 		m_tpsCamera = std::make_shared<TPSCamera>(m_camera, D3DXVECTOR3(0.0f, 3.0f, -7.5f));
@@ -61,8 +62,11 @@ public:
 	void update() override {
 		m_count++;
 		if (!m_player->isAlived()) {
-			m_soundManager->stop("bgm");
-			changeScene(SceneType::Title);
+			m_resultCount++;
+			if (m_resultCount > 180) {
+				m_soundManager->stop("bgm");
+				changeScene(SceneType::Title);
+			}
 			return;
 		}
 
@@ -70,11 +74,12 @@ public:
 		m_shots->update();
 		m_enemies->update();
 		m_particles->update();
-		m_tpsCamera->update(m_player->getPos(), m_player->getRot());
+		if (m_player->onStage())
+			m_tpsCamera->update(m_player->getPos(), m_player->getRot());
 		m_score->update();
 
 		//shot
-		if (m_inputManager->isPressedButton() && m_count % 5 == 0) {
+		if (m_inputManager->isPressedButton() && m_count % 5 == 0 && m_player->onStage()) {
 			auto vec = D3DXVECTOR3(3 * std::cos(m_player->getRot().y), 0.0f, -3 * std::sin(m_player->getRot().y));
 			auto shot = std::make_shared<Shot>(m_bulletSprite, m_camera, m_player->getPos() + vec, vec);
 			m_shots->add(shot);
@@ -94,7 +99,7 @@ public:
 				if (IsCollied(shot->getPos(), enemy->getPos(), 1, 1)) {
 					enemy->kill();
 					shot->kill();
-					createParticle(enemy->getPos(), 35);
+					createParticle(enemy->getPos(), Color(1.0f, 0.5f, 1.0f, 1.0f), 35);
 					m_score->addScore(100);
 					m_soundManager->play("bom", 0.5f);
 					break;
@@ -102,16 +107,24 @@ public:
 			}
 		}
 
+		bool allclean = false;
 		//enemy vs player
 		for (auto& enemy : *m_enemies) {
 			if (IsCollied(enemy->getPos(), m_player->getPos(), 1, 1)) {
-				m_player->damage();
+				if (m_player->damage()) {
+					createParticle(m_player->getPos(), Color(1.0f, 0.5f, 0.5f), 100);
+					allclean = true;
+				}
 				break;
 			}
 		}
+
+		if (allclean) {
+			m_enemies->clear();
+		}
 	}
 
-	void createParticle(const D3DXVECTOR3& pos, int num) {
+	void createParticle(const D3DXVECTOR3& pos, const Color& color, int num) {
 		for (int i = 0; i < num; i++) {
 			auto vec = D3DXVECTOR3(m_random->next(1.0f), 0, 0);
 
@@ -119,7 +132,7 @@ public:
 			D3DXMatrixRotationYawPitchRoll(&rot, m_random->next(D3DX_PI * 2), m_random->next(D3DX_PI * 2), m_random->next(D3DX_PI * 2));
 			D3DXVec3TransformCoord(&vec, &vec, &rot);
 
-			auto particle = std::make_shared<Particle>(m_particleSprite, m_camera, pos, vec, Color(1.0f, 0.5f, 1.0f, 1.0f));
+			auto particle = std::make_shared<Particle>(m_particleSprite, m_camera, pos, vec, color);
 			m_particles->add(particle);
 		}
 	}
@@ -135,7 +148,8 @@ public:
 
 		DisableZBuf(m_d3dDevice);
 		EnebleSubBlend(m_d3dDevice);
-		m_shadowSprite->draw({ m_player->getPos().x, 0, m_player->getPos().z }, { D3DX_PI / 2, 0, 0 }, 2.5f);
+		if (m_player->onStage())
+			m_shadowSprite->draw({ m_player->getPos().x, 0, m_player->getPos().z }, { D3DX_PI / 2, 0, 0 }, 2.5f);
 		EnebleAddBlend(m_d3dDevice);
 		m_particles->draw();
 		EnebleZBuf(m_d3dDevice);
@@ -162,6 +176,9 @@ public:
 		m_score->draw();
 		m_textFont->drawStr("LIFE :", { 15, 40 });
 		m_textFont->drawStr(std::to_string(m_player->getHP()), {95, 40}, Color(1.0f, 0.5f, 0.5f).toD3Dcolor());
+
+		if (!m_player->isAlived()) {
+		}
 	}
 private:
 	LPDIRECT3DDEVICE9 m_d3dDevice;
@@ -169,7 +186,7 @@ private:
 	SoundManagerPtr m_soundManager;
 	RandomPtr m_random;
 
-	int m_count = 0;
+	int m_count, m_resultCount;
 	CameraPtr m_camera;
 	TPSCameraPtr m_tpsCamera;
 	LightPtr m_light;

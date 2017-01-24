@@ -6,11 +6,64 @@ class Player {
 public:
 	Player(InputManagerPtr input, XModelPtr model) :
 		m_input(input), m_model(model),
-		m_pos(0, 0.75, 0), m_rot(0, 0, 0), m_speed(0), m_swingSpeed(0), m_count(0), m_hp(3), m_damageCount(0)
+		m_pos(0, 1, 0), m_rot(0, 0, 0),
+		m_speed(0), m_swingSpeed(0), m_count(0), m_hp(3),
+		m_state(State::Flash)
 	{}
 	void update() {
-		m_count++; m_damageCount--;
+		m_count++;
+		switch (m_state) {
+		case State::Flash:
+			if (m_count > 180)
+				m_state = State::Normal;
+			moveCtrl();
+			break;
+		case State::Normal:
+			moveCtrl();
+			break;
+		case State::Burn:
+			if (m_count > 60) {
+				m_count = 0;
+				m_hp--;
+				m_state = State::Flash;
+			}
+			break;
+		}
+	}
+	void draw() {
+		switch (m_state) {
+		case State::Flash:
+			if (m_count % 10 > 5)
+				m_model->draw(m_pos, m_rot + D3DXVECTOR3(0, D3DX_PI/2, 0));
+			break;
+		case State::Normal:
+			m_model->draw(m_pos, m_rot + D3DXVECTOR3(0, D3DX_PI/2, 0));
+			break;
+		}
+	}
+	bool damage() {
+		if (m_state == State::Normal) {
+			m_rot.z = 0;
+			m_speed = m_swingSpeed = 0;
+			m_count = 0;
+			m_state = State::Burn;
+			return true;
+		}
+		return false;
+	}
+	bool isAlived() {
+		if (m_hp > 0)
+			return true;
+		else
+			return false;
+	}
 
+	D3DXVECTOR3 getPos() const { return m_pos; }
+	D3DXVECTOR3 getRot() const { return m_rot; }
+	int getHP() const { return m_hp; }
+	bool onStage() const { return m_state != State::Burn && m_hp > 0; }
+private:
+	void moveCtrl() {
 		//speed control
 		if (m_input->isPressedUp())
 			m_speed += 0.025f;
@@ -37,38 +90,15 @@ public:
 		m_rot.x = m_speed * 0.5f;
 		m_rot.z = -m_swingSpeed * 0.35f;
 	}
-	void draw() {
-		if (m_damageCount > 0) {
-			if (m_count % 10 < 5)
-				m_model->draw(m_pos, m_rot + D3DXVECTOR3(0, D3DX_PI/2, 0));
-		} else {
-			m_model->draw(m_pos, m_rot + D3DXVECTOR3(0, D3DX_PI/2, 0));
-		}
-	}
-	bool damage() {
-		if (m_damageCount < 0) {
-			m_hp--;
-			m_damageCount = 120;
-			return true;
-		}
-		return false;
-	}
-	bool isAlived() {
-		if (m_hp > 0)
-			return true;
-		else
-			return false;
-	}
 
-	D3DXVECTOR3 getPos() const { return m_pos; }
-	D3DXVECTOR3 getRot() const { return m_rot; }
-	int getHP() const { return m_hp; }
-private:
 	InputManagerPtr m_input;
 	XModelPtr m_model;
 	D3DXVECTOR3 m_pos, m_rot;
 	float m_speed, m_swingSpeed;
-	int m_count, m_hp, m_damageCount;
+	int m_count, m_hp;
+	enum class State {
+		Flash, Normal, Burn,
+	} m_state;
 };
 using PlayerPtr = std::shared_ptr<Player>;
 

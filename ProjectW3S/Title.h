@@ -64,6 +64,7 @@ private:
 			{{0, h, 0}, 1.0f, D3DCOLOR_ARGB(alpha, 0, 0, 0)},
 			{{w, h, 0}, 1.0f, D3DCOLOR_ARGB(alpha, 0, 0, 0)},
 		};
+		m_d3dDevice->SetTexture(0, NULL);
 		m_d3dDevice->SetFVF(D3DFVF_XYZRHW | D3DFVF_DIFFUSE);
 		m_d3dDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, vtx.data(), sizeof(PlateVtx));
 	}
