@@ -114,6 +114,7 @@ public:
 				if (m_player->damage()) {
 					createParticle(m_player->getPos(), Color(1.0f, 0.5f, 0.5f), 100);
 					allclean = true;
+					m_soundManager->play("damage", 0.5f);
 				}
 				break;
 			}

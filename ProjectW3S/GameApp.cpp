@@ -14,6 +14,7 @@ GameApp::GameApp(HWND hWnd, HINSTANCE hInstance, bool fullScreen) {
 	m_soundManager->load("assets/bom.wav", "bom");
 	m_soundManager->load("assets/shoot.wav", "shoot");
 	m_soundManager->load("assets/bgm.wav", "bgm");
+	m_soundManager->load("assets/damage.wav", "damage");
 	changeScene(SceneType::Title);
 }
 
