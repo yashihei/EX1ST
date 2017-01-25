@@ -88,11 +88,18 @@ public:
 
 		//spown
 		if (m_count % 60 == 0) {
-			//TODO:—N‚«‚ğ‰“‚­‚É
+			D3DXVECTOR3 pos;
+			while (true) {
+				pos = D3DXVECTOR3(m_random->nextPlusMinus(50.0f), 1, m_random->nextPlusMinus(50.0f));
+				auto dis = m_player->getPos() - pos;
+				OutputDebugValue(std::abs(D3DXVec3Length(&dis)));
+				if (std::abs(D3DXVec3Length(&dis)) > 7)
+					break;
+			}
 			auto enemy = std::make_shared<Enemy>(m_XModelManager->get("enemy"), D3DXVECTOR3(m_random->nextPlusMinus(50.0f), 1, m_random->nextPlusMinus(50.0f)), m_player);
 			m_enemies->add(enemy);
 		}
-		
+
 		//shot vs enemy
 		for (auto& shot : *m_shots) {
 			for (auto& enemy : *m_enemies) {
@@ -180,7 +187,7 @@ public:
 
 		if (!m_player->isAlived()) {
 			float pad = m_resultCount < 30 ? Easing::OutQuint(m_resultCount, 30, 0, 65) : 65;
-			drawRectangle2D(m_d3dDevice, {0, 300 - pad}, {800, 300 + pad}, Color(0.5f, 0.5f, 0.5f, 0.6f).toD3Dcolor());
+			drawRectangle2D(m_d3dDevice, {0, 300 - pad}, {800, 300 + pad}, Color(0.8f, 0.2f, 0.2f, 0.6f).toD3Dcolor());
 			m_textFont->drawStr("GAME OVER", { 317, 260 });
 			m_textFont->drawStr("SCORE " + std::to_string(m_score->getScore()), { 317, 310 });
 		}
