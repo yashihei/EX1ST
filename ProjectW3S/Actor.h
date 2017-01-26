@@ -40,7 +40,7 @@ public:
 			[](std::shared_ptr<Type> actor) { return !actor->isEnabled(); }), m_actors.end());
 	}
 	void draw() {
-		for (auto& actor : m_actors) {
+		for (const auto& actor : m_actors) {
 			actor->draw();
 		}
 	}

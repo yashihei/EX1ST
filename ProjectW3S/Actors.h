@@ -146,11 +146,12 @@ private:
 	D3DXVECTOR3 m_pos, m_rot;
 	PlayerPtr m_player;
 };
+using EnemyPtr = std::shared_ptr<Enemy>;
 using EnemiesPtr = std::shared_ptr<ActorManager<Enemy>>;
 
 class Ray : public Actor {
 public:
-	Ray(SpritePtr sprite, CameraPtr camera, std::weak_ptr<Enemy> target, D3DXVECTOR3 pos, float rotY) :
+	Ray(SpritePtr sprite, CameraPtr camera, std::weak_ptr<Enemy> target, const D3DXVECTOR3& pos, float rotY) :
 		m_sprite(sprite), m_camera(camera), m_target(target), m_pos(pos), m_rotY(rotY), m_speed(0.5), m_count(0)
 	{}
 	void update() override {
@@ -176,11 +177,21 @@ public:
 		m_pos.x += std::cos(m_rotY) * m_speed;
 		m_pos.z += std::sin(m_rotY) * m_speed;
 
+		m_tracks.push_back(m_pos);
+		if (m_tracks.size() > 10)
+			m_tracks.pop_front();
+
 		if (m_count > 600)
 			kill();
 	}
 	void draw() override {
-		m_sprite->drawBillBoard(m_pos, m_camera);
+		int count = 0;
+		for (auto& pos : m_tracks) {
+			count++;
+			m_sprite->setDiffuse(Color(0.5f, 0.5f, 1.0f, 1.0f/10 * count).toD3Dcolor());
+			m_sprite->setVtx();
+			m_sprite->drawBillBoard(pos, m_camera, 1.0f/10 * count);
+		}
 	}
 private:
 	SpritePtr m_sprite;

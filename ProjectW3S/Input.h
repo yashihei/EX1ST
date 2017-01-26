@@ -116,7 +116,7 @@ public:
 	bool isClickedLeft()    const { return m_keyboard->isClicked(DIK_LEFT) | m_xInput->isClicked(XInput::Left); }
 	bool isClickedRight()   const { return m_keyboard->isClicked(DIK_RIGHT) | m_xInput->isClicked(XInput::Right); }
 
-	bool isReleasedButton1() const { return m_keyboard->isReleased(DIK_Z) | m_keyboard->isReleased(DIK_SPACE) |m_xInput->isReleased(XInput::Y); }
+	bool isReleasedButton1() const { return m_keyboard->isReleased(DIK_Z) | m_keyboard->isReleased(DIK_SPACE) | m_xInput->isReleased(XInput::Y); }
 	bool isReleasedButton2() const { return m_keyboard->isReleased(DIK_X) | m_xInput->isReleased(XInput::B); }
 	bool isReleasedButton3() const { return m_keyboard->isReleased(DIK_C) | m_xInput->isReleased(XInput::A); }
 	bool isReleasedButton4() const { return m_keyboard->isReleased(DIK_V) | m_xInput->isReleased(XInput::X); }

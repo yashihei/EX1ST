@@ -32,6 +32,8 @@ public:
 		m_bulletSprite->setDiffuse(Color(1.0f, 0.7f, 0, 1.0f).toD3Dcolor());
 		m_bulletSprite->setVtx();
 
+		m_raySprite = std::make_shared<Sprite>(m_d3dDevice, m_texureManager->get("circle"), 64);
+
 		m_shadowSprite = std::make_shared<Sprite>(m_d3dDevice, m_texureManager->get("shadow"), 64);
 		m_shadowSprite->setDiffuse(Color(1.0f, 1.0f, 1.0f, 0.15f).toD3Dcolor());
 		m_shadowSprite->setVtx();
@@ -56,6 +58,7 @@ public:
 		m_enemies = std::make_shared<ActorManager<Enemy>>();
 		m_particles = std::make_shared<ActorManager<Particle>>();
 		m_score = std::make_shared<Score>(m_textFont);
+		m_rays = std::make_shared<ActorManager<Ray>>();
 
 		m_soundManager->play("bgm", 1.0f, true);
 	}
@@ -77,13 +80,25 @@ public:
 		if (m_player->onStage())
 			m_tpsCamera->update(m_player->getPos(), m_player->getRot());
 		m_score->update();
+		m_rays->update();
 
 		//shot
-		if (m_inputManager->isPressedButton() && m_count % 5 == 0 && m_player->onStage()) {
+		if (m_inputManager->isPressedButton1() && m_count % 5 == 0 && m_player->onStage()) {
 			auto vec = D3DXVECTOR3(3 * std::cos(m_player->getRot().y), 0.0f, -3 * std::sin(m_player->getRot().y));
 			auto shot = std::make_shared<Shot>(m_bulletSprite, m_camera, m_player->getPos() + vec, vec);
 			m_shots->add(shot);
 			m_soundManager->play("shoot", 0.35f);
+		}
+		//ray
+		if (m_inputManager->isClickedButton2() && m_player->onStage()) {
+			auto nearEnemy = getNearEnemy();
+			if (nearEnemy != nullptr) {
+				for (int i = 0; i < 5; i++) {
+					auto ray = std::make_shared<Ray>(m_raySprite, m_camera, nearEnemy, m_player->getPos(), D3DX_PI*2/5 * i);
+					m_rays->add(ray);
+				}
+				m_soundManager->play("shoot", 0.35f);
+			}
 		}
 
 		//spown
@@ -132,6 +147,12 @@ public:
 		}
 	}
 
+	EnemyPtr getNearEnemy() {
+		if (m_enemies->size() == 0)
+			return nullptr;
+		return *m_enemies->begin();
+	}
+
 	void createParticle(const D3DXVECTOR3& pos, const Color& color, int num) {
 		for (int i = 0; i < num; i++) {
 			auto vec = D3DXVECTOR3(m_random->next(1.0f), 0, 0);
@@ -155,6 +176,7 @@ public:
 		m_shots->draw();
 
 		DisableZBuf(m_d3dDevice);
+		m_rays->draw();
 		EnebleSubBlend(m_d3dDevice);
 		if (m_player->onStage())
 			m_shadowSprite->draw({ m_player->getPos().x, 0, m_player->getPos().z }, { D3DX_PI / 2, 0, 0 }, 2.5f);
@@ -191,9 +213,6 @@ public:
 			m_textFont->drawStr("GAME OVER", { 317, 260 });
 			m_textFont->drawStr("SCORE " + std::to_string(m_score->getScore()), { 317, 310 });
 		}
-		//fadeout
-		//if (m_count < 30)
-		//	drawRectangle2D(m_d3dDevice, {0, 0}, {800, 600}, Color(0, 0, 0, 1.0f - 1.0f / 30.0f * m_count).toD3Dcolor());
 	}
 private:
 	LPDIRECT3DDEVICE9 m_d3dDevice;
@@ -206,7 +225,7 @@ private:
 	TPSCameraPtr m_tpsCamera;
 	LightPtr m_light;
 	TextureManagerPtr m_texureManager;
-	SpritePtr m_groundSprite, m_bulletSprite, m_particleSprite, m_shadowSprite;
+	SpritePtr m_groundSprite, m_bulletSprite, m_raySprite, m_particleSprite, m_shadowSprite;
 	Sprite2DPtr m_raderSprite, m_pointSprite, m_scanSprite;
 	XModelManagerPtr m_XModelManager;
 	FontPtr m_textFont;
@@ -215,4 +234,5 @@ private:
 	EnemiesPtr m_enemies;
 	ParticlesPtr m_particles;
 	ScorePtr m_score;
+	RaysPtr m_rays;
 };
