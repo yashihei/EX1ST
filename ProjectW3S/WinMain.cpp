@@ -78,7 +78,7 @@ bool createWindow(HINSTANCE hInstance, int nCmdShow, HWND* hWnd, int width, int 
 	if (fullScreen)
 		style = WS_EX_TOPMOST | WS_VISIBLE | WS_POPUP;
 	else
-		style = WS_OVERLAPPEDWINDOW;
+		style = WS_OVERLAPPEDWINDOW - WS_MAXIMIZEBOX - WS_THICKFRAME;
 
 	*hWnd = CreateWindow(className, titleName, style, CW_USEDEFAULT, CW_USEDEFAULT, width, height, (HWND)NULL, (HMENU)NULL, hInstance, (LPVOID)NULL);
 
